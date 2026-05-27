@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>My First Page</title>
+
+  <!-- Allows special characters and emojis -->
+  <meta charset="UTF-8">
+
+  <!-- Makes the page scale correctly on phones -->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Todo App</title>
+
+  <!-- Connects HTML to the CSS file -->
+  <link rel="stylesheet" href="style.css">
+
 </head>
-<body>
-    <h1>Hello, World!</h1>
-    <p>This is a simple HTML5 page.</p>
+
+<body onload="setUp()">
+
+  <!-- Main app container -->
+  <div class="container">
+
+    <!-- Small preset box in corner -->
+          <div class="preset-box">
+            <h3>Presets</h3>
+
+            <button onclick="LoadSchool()">
+                School</button>
+
+            <button onclick=" LoadGroceries()">
+              Groceries</button>
+
+            <button onclick="LoadWork()">
+              Work</button>
+
+          </div>
+
+    <h1>Todo List</h1>
+
+    <!-- Row containing input + add button -->
+    <div class="input-row">
+
+      <!-- User types task here -->
+      <input
+        type="text"
+        id="taskInput"
+        placeholder="Add a task..."
+      >
+
+      <!-- Runs addTask() when clicked -->
+      <button onclick="addTask()">
+        Add
+      </button>
+
+    </div>
+
+    <!-- Tasks get inserted here dynamically -->
+    <ul id="taskList"></ul>
+
+  </div>
+
+  <!-- Connects HTML to JavaScript -->
+  <script src="script.js"></script>
+
 </body>
 </html>
-
