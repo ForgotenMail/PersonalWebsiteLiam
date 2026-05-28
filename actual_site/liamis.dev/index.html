@@ -2,11 +2,466 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My First Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- ============================================
+         PAGE TITLE
+         - Change "Liam" to your name
+    ============================================= -->
+    <title>Liam | Robotocist and Programmer</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>This is a simple HTML5 page.</p>
+
+    <!-- ============================================
+         MOUSE GLOW
+         - Ambient glow follows cursor
+         - Hidden on mobile (via CSS)
+    ============================================= -->
+    <div class="mouse-glow"></div>
+
+
+    <!-- ============================================
+         PAGE WRAPPER
+         - Desktop: side-by-side layout
+         - Mobile: stacked vertically, scrollable
+    ============================================= -->
+    <div class="page">
+
+
+        <!-- ============================================
+             LEFT SIDE - YOUR INFO
+             - Desktop: fixed sidebar
+             - Mobile: normal flow, scrolls with page
+        ============================================= -->
+        <aside class="sidebar">
+
+
+            <!-- ==================
+                 PROFILE
+            ================== -->
+            <div class="profile">
+                
+                <!-- Avatar: shows your initial -->
+                <!-- To use photo: <img src="photo.jpg" alt="Name" class="avatar"> -->
+                <div class="avatar">L</div>
+                
+                <!-- Name -->
+                <h1 class="name">Liam Ribble</h1>
+                
+                <!-- Job title -->
+                <p class="role">Robotocist and Programmer</p>
+                
+                <!-- Location (optional) -->
+                <p class="location">Gilbert, Arizona</p>
+                
+                <!-- Status badge -->
+                <div class="status">
+                    <span class="status-dot"></span>
+                    <span>In Education</span>
+                </div>
+                
+            </div>
+
+
+            <!-- ==================
+                 ABOUT
+            ================== -->
+            <div class="sidebar-section">
+                <h2 class="sidebar-title">About</h2>
+                <p class="about">
+Freindly neighnborhood robotocist and programmer. 
+I have a passion for building robots and programming them for Vex robotics competitions. (AKA my life!)
+I am currently in 8th grade, and looking foward to doing vex, and working on open source projects for fun!
+If you want to reach out to me, discord is the best way to do so, but email works too!
+                </p>
+            </div>
+
+
+            <!-- ==================
+                 SKILLS
+            ================== -->
+            <div class="sidebar-section">
+                <h2 class="sidebar-title">Stack</h2>
+                <div class="skills">
+                    <span class="skill">Python</span>
+                    <span class="skill">C</span>
+                    <span class="skill">C++</span>
+                    <span class="skill">Golang</span>
+                    <span class="skill">HTML5</span>
+                    <span class="skill">Javascript</span>
+                    <span class="skill">Rust (Learning)</span>
+                    <span class="skill">Being cool :D</span>
+                </div>
+            </div>
+
+
+            <!-- ==================
+                 LINKS
+            ================== -->
+            <div class="sidebar-section">
+                <h2 class="sidebar-title">Connect</h2>
+                <ul class="links">
+                    <li>
+                        <a href="william.thomas.ribble@gmail.com">
+                            <span>Email</span>
+                            <span class="link-arrow">-></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/ForgotenMail" target="_blank">
+                            <span>GitHub</span>
+                            <span class="link-arrow">-></span>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="https://linkedin.com/in/yourusername" target="_blank">
+                            <span>LinkedIn</span>
+                            <span class="link-arrow">-></span>
+                        </a>
+                    </li> -->
+                    <!-- <li>
+                        <a href="https://twitter.com/yourusername" target="_blank">
+                            <span>Twitter</span>
+                            <span class="link-arrow">-></span>
+                        </a>
+                     </li> -->
+                                         <li>
+                        <a href="https://discord.com/users/989271986901508126" target="_blank">
+                            <span>Discord</span>
+                            <span class="link-arrow">-></span>
+                        </a>
+                    </li> 
+                </ul>
+            </div>
+
+
+            <!-- ==================
+                 FOOTER
+            ================== -->
+            <div class="sidebar-footer">
+                <p>2026 Cool dude named Liam</p>
+            </div>
+
+
+        </aside>
+
+
+        <!-- ============================================
+             DIVIDER LINE
+             - Vertical line between panels
+             - Hidden on mobile
+        ============================================= -->
+        <div class="divider"></div>
+
+
+        <!-- ============================================
+             MAIN CONTENT - PROJECTS & BLOG
+             - Desktop: scrollable main area
+             - Mobile: continues below sidebar
+        ============================================= -->
+        <main class="content">
+
+
+            <!-- ==================
+                 PROJECTS
+            ================== -->
+            <section class="section">
+                
+                <div class="section-header">
+                    <h2 class="section-title">Projects</h2>
+                    <p class="section-sub">Things I have built</p>
+                </div>
+
+                <div class="cards">
+
+                    <!-- PROJECT 1 -->
+                    <a href="https://github.com/venice-v5/venice" target="_blank" class="card">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="card-top">
+                                <h3 class="card-name">Venice</h3>
+                                <span class="card-year">2026</span>
+                            </div>
+                            <p class="card-desc">
+                                A brief description of what this project does. 
+                                Keep it short and clear.
+                            </p>
+                            <div class="card-tags">
+                                <span>React</span>
+                                <span>Node.js</span>
+                                <span>PostgreSQL</span>
+                            </div>
+                            <div class="card-bottom">
+                                <span>View Project</span>
+                                <span class="card-arrow">-></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- PROJECT 2 -->
+                    <!-- <a href="https://github.com/username/repo" target="_blank" class="card">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="card-top">
+                                <h3 class="card-name">CLI Tool</h3>
+                                <span class="card-year">2024</span>
+                            </div>
+                            <p class="card-desc">
+                                Command-line tool for automating workflows. 
+                                Saves hours of repetitive work.
+                            </p>
+                            <div class="card-tags">
+                                <span>Go</span>
+                                <span>Cobra</span>
+                            </div>
+                            <div class="card-bottom">
+                                <span>View Source</span>
+                                <span class="card-arrow">-></span>
+                            </div>
+                        </div>
+                    </a> -->
+
+                    <!-- PROJECT 3 -->
+                    <!-- <a href="https://your-project.com" target="_blank" class="card">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="card-top">
+                                <h3 class="card-name">API Service</h3>
+                                <span class="card-year">2023</span>
+                            </div>
+                            <p class="card-desc">
+                                High-performance REST API with caching and rate limiting.
+                            </p>
+                            <div class="card-tags">
+                                <span>Python</span>
+                                <span>FastAPI</span>
+                                <span>Redis</span>
+                            </div>
+                            <div class="card-bottom">
+                                <span>View Project</span>
+                                <span class="card-arrow">-></span>
+                            </div>
+                        </div>
+                    </a> -->
+
+                    <!-- PROJECT 4 -->
+                    <!-- <a href="https://github.com/username/repo" target="_blank" class="card">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="card-top">
+                                <h3 class="card-name">Dashboard</h3>
+                                <span class="card-year">2023</span>
+                            </div>
+                            <p class="card-desc">
+                                Real-time analytics dashboard with customizable widgets.
+                            </p>
+                            <div class="card-tags">
+                                <span>Vue.js</span>
+                                <span>D3.js</span>
+                                <span>WebSocket</span>
+                            </div>
+                            <div class="card-bottom">
+                                <span>View Source</span>
+                                <span class="card-arrow">-></span>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+
+            </section> -->
+
+
+            <!-- ==================
+                 BLOG
+            ================== -->
+            <section class="section">
+                
+                <div class="section-header">
+                    <h2 class="section-title">Blog</h2>
+                    <p class="section-sub">Thoughts and tutorials</p>
+                </div>
+
+                <div class="posts">
+
+                    <!-- POST 1 -->
+                    <!-- <a href="/blog/post-url" class="post">
+                        <div class="post-date">
+                            <span class="post-day">15</span>
+                            <span class="post-month">Mar</span>
+                        </div>
+                        <div class="post-info">
+                            <h3 class="post-title">Building Scalable APIs with FastAPI</h3>
+                            <p class="post-excerpt">
+                                A deep dive into building production-ready APIs. 
+                                Covering authentication, caching, and deployment.
+                            </p>
+                            <div class="post-meta">
+                                <span class="post-tag">Tutorial</span>
+                                <span class="post-time">12 min read</span>
+                            </div>
+                        </div>
+                        <span class="post-arrow">-></span>
+                    </a> -->
+
+                    <!-- POST 2 -->
+                    <!-- <a href="/blog/post-url" class="post">
+                        <div class="post-date">
+                            <span class="post-day">02</span>
+                            <span class="post-month">Mar</span>
+                        </div>
+                        <div class="post-info">
+                            <h3 class="post-title">My Development Environment in 2024</h3>
+                            <p class="post-excerpt">
+                                Tools, configs, and workflows I use daily. 
+                                Terminal setup, editor, and productivity apps.
+                            </p>
+                            <div class="post-meta">
+                                <span class="post-tag">Setup</span>
+                                <span class="post-time">8 min read</span>
+                            </div>
+                        </div>
+                        <span class="post-arrow">-></span>
+                    </a> -->
+
+                    <!-- POST 3 -->
+                     <!--
+                    <a href="/blog/post-url" class="post">
+                        <div class="post-date">
+                            <span class="post-day">18</span>
+                            <span class="post-month">Feb</span>
+                        </div>
+                        <div class="post-info">
+                            <h3 class="post-title">Understanding TypeScript Generics</h3>
+                            <p class="post-excerpt">
+                                Practical guide to generics with real-world examples. 
+                                From basics to advanced patterns.
+                            </p>
+                            <div class="post-meta">
+                                <span class="post-tag">TypeScript</span>
+                                <span class="post-time">15 min read</span>
+                            </div>
+                        </div>
+                        <span class="post-arrow">-></span>
+                    </a> -->
+
+                    <!-- POST 4 -->
+                    <!-- <a href="/blog/post-url" class="post">
+                        <div class="post-date">
+                            <span class="post-day">05</span>
+                            <span class="post-month">Feb</span>
+                        </div>
+                        <div class="post-info">
+                            <h3 class="post-title">Docker for Local Development</h3>
+                            <p class="post-excerpt">
+                                Setting up a containerized development environment. 
+                                Consistent setups across machines.
+                            </p>
+                            <div class="post-meta">
+                                <span class="post-tag">DevOps</span>
+                                <span class="post-time">10 min read</span>
+                            </div>
+                        </div>
+                        <span class="post-arrow">-></span>
+                    </a> -->
+
+                    <!-- POST 5 -->
+                    <!-- <a href="/blog/post-url" class="post">
+                        <div class="post-date">
+                            <span class="post-day">21</span>
+                            <span class="post-month">Jan</span>
+                        </div>
+                        <div class="post-info">
+                            <h3 class="post-title">Writing Better Git Commits</h3>
+                            <p class="post-excerpt">
+                                Conventions and tools for meaningful commit history.
+                            </p>
+                            <div class="post-meta">
+                                <span class="post-tag">Git</span>
+                                <span class="post-time">6 min read</span>
+                            </div>
+                        </div>
+                        <span class="post-arrow">-></span>
+                    </a>
+                -->
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <!-- ============================================
+         JAVASCRIPT
+         - Mouse glow effect
+         - Card hover glow
+    ============================================= -->
+    <script>
+        // ==========================================
+        // MOUSE GLOW - follows cursor on desktop
+        // ==========================================
+        (function() {
+            var glow = document.querySelector('.mouse-glow');
+            if (!glow) return;
+            
+            // Disable on touch devices
+            if ('ontouchstart' in window) {
+                glow.style.display = 'none';
+                return;
+            }
+            
+            var x = 0, y = 0;
+            var gx = 0, gy = 0;
+            
+            document.addEventListener('mousemove', function(e) {
+                x = e.clientX;
+                y = e.clientY;
+            });
+            
+            function animate() {
+                gx += (x - gx) * 0.1;
+                gy += (y - gy) * 0.1;
+                glow.style.left = gx + 'px';
+                glow.style.top = gy + 'px';
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+        
+        // ==========================================
+        // CARD GLOW - follows mouse on hover
+        // ==========================================
+        (function() {
+            var cards = document.querySelectorAll('.card');
+            
+            cards.forEach(function(card) {
+                var glow = card.querySelector('.card-glow');
+                if (!glow) return;
+                
+                card.addEventListener('mousemove', function(e) {
+                    var rect = card.getBoundingClientRect();
+                    glow.style.left = (e.clientX - rect.left) + 'px';
+                    glow.style.top = (e.clientY - rect.top) + 'px';
+                    glow.style.opacity = '1';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    glow.style.opacity = '0';
+                });
+            });
+        })();
+    </script>
+
 </body>
 </html>
-
