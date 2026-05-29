@@ -1,0 +1,20 @@
+.maintext {
+    color: #14fc65;
+
+
+}
+/* make sure to not have a space! */
+.maintext:hover {
+  background-color: green;
+  color: black;
+}
+p {
+    color: #000000;
+
+}
+p:hover {
+  color: blue;
+
+}
+
+
