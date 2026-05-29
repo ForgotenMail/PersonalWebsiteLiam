@@ -1,101 +1,146 @@
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
-const client = new Client({
-    host: '/var/run/postgresql',
-    database: 'liam',
-});
+// Use DATABASE_URL in production when it is available. Otherwise connect to the
+// local PostgreSQL server over its Unix socket and use the existing `liam`
+// database. Rows are stored in PostgreSQL, so they persist across Node restarts.
+const pool = new Pool(
+    process.env.DATABASE_URL
+        ? {
+              connectionString: process.env.DATABASE_URL,
+              ssl: process.env.PGSSLMODE === 'require' ? { rejectUnauthorized: false } : false,
+          }
+        : {
+              host: process.env.PGHOST || '/var/run/postgresql',
+              database: process.env.PGDATABASE || 'liam',
+              user: process.env.PGUSER,
+              password: process.env.PGPASSWORD,
+              port: process.env.PGPORT ? Number(process.env.PGPORT) : 5432,
+          }
+);
+
+let setupPromise;
 
 // ============================================================
-// Sets up the table when the program first runs
+// Sets up the table when the server first starts
 // ============================================================
 async function setupDatabase() {
-    await client.connect();
-    console.log("Connected to database!\n");
+    if (!setupPromise) {
+        setupPromise = pool.query(`
+            CREATE TABLE IF NOT EXISTS task (
+                task_name   TEXT PRIMARY KEY,
+                completed   BOOLEAN NOT NULL DEFAULT false
+            );
+        `);
+    }
 
-    // FIXED: You had "SERIAL PRIMARY KEY TEXT NOT NULL" which is wrong
-    // SERIAL is a number type (auto counting id)
-    // If you want the task_name to be the main identifier just use TEXT PRIMARY KEY
-    // completed is a BOOLEAN (true/false) not an INT:
-    await client.query(`
-        CREATE TABLE IF NOT EXISTS task (
-            task_name      TEXT PRIMARY KEY,
-            completed BOOLEAN DEFAULT false
-        );
-    `);
-    console.log("Table ready!\n");
+    await setupPromise;
+    console.log('Database table ready!');
 }
 
 // ============================================================
 // Gets all tasks from the database
 // ============================================================
 async function getAllTasks() {
-    const result = await client.query('SELECT * FROM task;');
-    return result.rows; // Returns an array of tasks like:
-                        // [{task_name: "Do Homework", completed: false}, ...]
+    await setupDatabase();
+
+    const result = await pool.query(`
+        SELECT task_name, completed
+        FROM task
+        ORDER BY task_name ASC;
+    `);
+
+    return result.rows;
 }
 
 // ============================================================
 // Adds a new task to the database
 // ============================================================
-async function addTaskToDatabase(tasktask_name) {
-    // FIXED: You had "clinet" (typo) and "comppeted" (typo)
-    // FIXED: You were putting taskText directly in the string (dangerous!)
-    //        Always use $1, $2 placeholders!
-    await client.query(
-        'INSERT INTO task (task_name, completed) VALUES ($1, $2);',
-        [tasktask_name, false]
+async function addTaskToDatabase(taskName) {
+    await setupDatabase();
+
+    const cleanTaskName = taskName.trim();
+    if (!cleanTaskName) {
+        throw new Error('Task name cannot be empty.');
+    }
+
+    const result = await pool.query(
+        `
+            INSERT INTO task (task_name, completed)
+            VALUES ($1, false)
+            ON CONFLICT (task_name) DO UPDATE
+                SET task_name = EXCLUDED.task_name
+            RETURNING task_name, completed;
+        `,
+        [cleanTaskName]
     );
-    console.log(`Added task: ${tasktask_name}`);
+
+    console.log(`Added task: ${cleanTaskName}`);
+    return result.rows[0];
 }
 
 // ============================================================
-// THIS IS THE TOGGLE YOU ASKED FOR
-// Flips the completed state and returns the task task_name + new state
+// Flips the completed state and returns the updated task
 // ============================================================
-async function toggleTask(tasktask_name) {
-    // NOT completed flips true --> false and false --> true
-    await client.query(
-        'UPDATE task SET completed = NOT completed WHERE task_name = $1;',
-        [tasktask_name]
+async function toggleTask(taskName) {
+    await setupDatabase();
+
+    const result = await pool.query(
+        `
+            UPDATE task
+            SET completed = NOT completed
+            WHERE task_name = $1
+            RETURNING task_name, completed;
+        `,
+        [taskName]
     );
 
-    // Read the updated task so we can see what it changed to
-    const result = await client.query(
-        'SELECT * FROM task WHERE task_name = $1;',
-        [tasktask_name]
-    );
+    if (result.rowCount === 0) {
+        return null;
+    }
 
     const task = result.rows[0];
-    console.log(`Task "${task.task_name}" is now ${task.completed ? "completed" : "not completed"}`);
-    return task; // Returns the full task object so the browser can update the page
+    console.log(`Task "${task.task_name}" is now ${task.completed ? 'completed' : 'not completed'}`);
+    return task;
 }
 
 // ============================================================
 // Deletes a task from the database by task_name
 // ============================================================
-async function deleteTask(tasktask_name) {
-    await client.query(
-        'DELETE FROM task WHERE task_name = $1;',
-        [tasktask_name]
+async function deleteTask(taskName) {
+    await setupDatabase();
+
+    const result = await pool.query(
+        `
+            DELETE FROM task
+            WHERE task_name = $1
+            RETURNING task_name, completed;
+        `,
+        [taskName]
     );
-    console.log(`Deleted task: ${tasktask_name}`);
+
+    if (result.rowCount === 0) {
+        return null;
+    }
+
+    console.log(`Deleted task: ${taskName}`);
+    return result.rows[0];
 }
 
-
+// Kept for compatibility with existing code that imports setUp().
 async function setUp() {
-    const allTasks = await getAllTasks();  // FIXED: needs () to call it, and await since its async
-    for (let task of allTasks) {          // FIXED: "let" should be "for...of"
-        addTask(task.task_name, task.completed); // FIXED: pass in the name and completed state
-    }
-// Export all functions so other files can use them
+    return getAllTasks();
+}
+
+async function closeDatabase() {
+    await pool.end();
+}
+
 module.exports = {
     setupDatabase,
     getAllTasks,
     addTaskToDatabase,
     toggleTask,
     deleteTask,
-  setUp
+    setUp,
+    closeDatabase,
 };
-}
-
-}
