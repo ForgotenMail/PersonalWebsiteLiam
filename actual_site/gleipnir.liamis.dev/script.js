@@ -11,9 +11,25 @@ function sayHello() {
   }
   const todo_item = document.createElement("li");
   todo_item.textContent = inputValue;
-  todo_list.appendChild(todo_item);
+  //
+  // const checkbox = document.createElement("input");
+  // checkbox.type = "checkbox";
+  //
+  // const span = document.createElement("span");
+  // span.textContent = inputVaue;
+  //
+  // const delete_btn = document.createElement("button");
+  // delete_btn.textContent = "Delete";
+  //
+  // delete_btn.addEventListner("click", () => {
+  //   todo_list.removeChild(todo_item);
+  // });
+  //
+ todo_list.appendChild(todo_item);
+
 
   todo_input.value = "";
+
 }
 
 
