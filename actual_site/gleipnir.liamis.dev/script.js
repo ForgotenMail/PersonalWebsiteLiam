@@ -28,7 +28,8 @@ function sayHello() {
     todo_item.appendChild(checkbox);
     todo_item.appendChild(span);
     todo_item.appendChild(delete_btn);
-    todo_item.appendChild(todo_item);
+
+    todo_list.appendChild(todo_item);
 
     todo_input.value = "";
 
