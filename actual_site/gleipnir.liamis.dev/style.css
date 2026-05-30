@@ -1,0 +1,17 @@
+  /* This is a comment */
+  
+body {
+  background-color: darkblue;
+
+}
+
+h1 {
+  color: lightblue;
+}
+.todo_item {
+    width: 500px;
+    height: 100px;
+    background-color: #002d52; 
+  }
+
+
