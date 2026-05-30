@@ -1,68 +1,20 @@
-<!DOCTYPE html>
+<DOCTYPE <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="script.js" defer></script>
+  </head>
+  <body>
 
-<head>
+      <h1>To Do List</h1>
+      <input id="todo_input" type="text" name="todo" placeholder="Enter your next itme of buisness!">
+      <button onclick="sayHello()">Submit</button>
 
-  <!-- Allows special characters and emojis -->
-  <meta charset="UTF-8">
-
-  <!-- Makes the page scale correctly on phones -->
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-  <title>Todo App</title>
-
-  <!-- Connects HTML to the CSS file -->
-  <link rel="stylesheet" href="style.css">
-
-</head>
-
-<body onload="setUp()">
-
-  <!-- Main app container -->
-  <div class="container">
-
-    <!-- Small preset box in corner -->
-          <div class="preset-box">
-            <h3>Presets</h3>
-
-            <button onclick="LoadSchool()">
-                School</button>
-
-            <button onclick=" LoadGroceries()">
-              Groceries</button>
-
-            <button onclick="LoadWork()">
-              Work</button>
-
-          </div>
-
-    <h1>Todo List</h1>
-
-    <!-- Row containing input + add button -->
-    <div class="input-row">
-
-      <!-- User types task here -->
-      <input
-        type="text"
-        id="taskInput"
-        placeholder="Add a task..."
-      >
-
-      <!-- Runs addTask() when clicked -->
-      <button onclick="addTask()">
-        Add
-      </button>
-
-    </div>
-
-    <!-- Tasks get inserted here dynamically -->
-    <ul id="taskList"></ul>
-
-  </div>
-
-  <!-- Connects HTML to JavaScript -->
-  <script src="script.js"></script>
-
-</body>
+      <ul id="todo_list">
+          <li class="todo_item"> This is a basic todo list Item</li>
+                  </ul>
+  </body>
 </html>
