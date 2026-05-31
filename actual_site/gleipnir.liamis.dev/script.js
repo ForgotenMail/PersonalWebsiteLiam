@@ -4,6 +4,7 @@ const todo_list = document.getElementById("todo_list");
 const todo_input = document.getElementById("todo_input");
 // Create the function
 function CreateTask(task_name) {
+  console.log("CreateTask called with", task_name)
   let inputValue;
 
   if (task_name == undefined) {
@@ -44,9 +45,5 @@ function CreateTask(task_name) {
 
     todo_input.value = "";
 
-}
-
-preset_work() {
-  
 }
 
