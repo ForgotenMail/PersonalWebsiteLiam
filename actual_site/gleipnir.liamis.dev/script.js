@@ -47,3 +47,20 @@ function CreateTask(task_name) {
 
 }
 
+function preset_work() {
+  CreateTask("Find A girlfriend")
+  CreateTask("Finish Project")
+  CreateTask("Hit on coworkers ")
+}
+
+function preset_school() {
+  CreatTask("Do some research for scienc")
+  CreatTask("Play Some amongus!")
+  CreateTask("Do ELA homework")
+}
+
+function preset_fun() {
+  CreateTask("Make a videogame")
+  CreateTask("Find a new friend")
+  CreateTask("Listen to some greenday")
+}
