@@ -11,15 +11,17 @@
     
       <h1>To Do List</h1>
       <input id="todo_input" type="text" name="todo" placeholder="Enter your next itme of buisness!">
-      <button onclick="sayHello()">Submit</button> 
-      <ul id="todo_list">
-                <li class="todo_item">
+      <button onclick="CreateTask()">Submit</button> 
 
-                <input type="checkbox"></input>
-                <span>Go to viewport</span>
-                <button>Delete</button>   
-                </li>
-              </ul>
+      <div class="preset_box">
+      <button onclick="preset_work()">Work</button>
+      <button onclick="preset_school()">School</button>
+      <button onclick="preset_fun()">Fun</button>
+     </div>
+
+      <ul id="todo_list">
+
+      </ul>
 
   </body>
 </html>

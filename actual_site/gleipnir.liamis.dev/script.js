@@ -3,12 +3,23 @@
 const todo_list = document.getElementById("todo_list");
 const todo_input = document.getElementById("todo_input");
 // Create the function
-function sayHello() {
-  const inputValue = todo_input.value;
-  if (inputValue == "") {
-      alert("Please actually type something bro");
-      return;
-    }
+function CreateTask(task_name) {
+  let inputValue;
+
+  if (task_name == undefined) {
+
+    if (todo_input.value == "") {
+        alert("Please actually type something bro");
+        return;
+      }
+     inputValue = todo_input.value;
+}
+
+  else {
+     inputValue = task_name;
+  }
+    
+
     const todo_item = document.createElement("li");
     todo_item.classList.add("todo_item");
 
@@ -35,5 +46,7 @@ function sayHello() {
 
 }
 
-
+preset_work() {
+  
+}
 
