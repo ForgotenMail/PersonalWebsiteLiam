@@ -59,8 +59,12 @@ function preset_school() {
   CreateTask("Do ELA homework")
 }
 
-function preset_fun() {
-  CreateTask("Make a videogame")
-  CreateTask("Find a new friend")
-  CreateTask("Listen to some greenday")
+async function preset_fun() {
+  const response = await fetch("http://127.0.0.1:5000");
+
+  console.log(response)
+  //
+  // CreateTask("Make a videogame")
+  // CreateTask("Find a new friend")
+  // CreateTask("Listen to some greenday")
 }
