@@ -9,8 +9,7 @@ CORS(app)
 @app.route('/')
 
 def home():
-    name = request.args.get("name", "Flask")
-    return f"Hello, {escape(name)}!"    
+    return "Greetings from Flask"  
 
 if __name__ == "__main__":
     app.run(debug=True)
