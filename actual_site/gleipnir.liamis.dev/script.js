@@ -59,12 +59,27 @@ function preset_school() {
   CreateTask("Do ELA homework")
 }
 
-async function preset_fun() {
-  const response = await fetch("http://127.0.0.1:5000");
+function preset_fun() {
+  CreateTask("Make a videogame")
+  CreateTask("Find a new friend")
+  CreateTask("Listen to some greenday")
+}
 
-  console.log(response)
-  //
-  // CreateTask("Make a videogame")
-  // CreateTask("Find a new friend")
-  // CreateTask("Listen to some greenday")
+async function send_message() {
+  const payload = {"message": "Hello from ur buddy javascript"};
+  
+  const response await fetch ('http://127.0.0.1:5000/message', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    
+    },
+    body: JSON.stringify(payload)
+
+  }); 
+
+  const result = await response.json;
+  
+  console.log(result);
+
 }
