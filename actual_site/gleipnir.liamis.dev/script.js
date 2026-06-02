@@ -1,5 +1,3 @@
-// This is a basic commnet
-//Getting ids for Item
 const todo_list = document.getElementById("todo_list");
 const todo_input = document.getElementById("todo_input");
 // Create the function
@@ -7,7 +5,7 @@ function CreateTask(task_name) {
   console.log("CreateTask called with", task_name)
   let inputValue;
 
-  if (task_name == undefined) {
+  if (task_name == undefined || task_name == null || task_name == "") {
 
     if (todo_input.value == "") {
         alert("Please actually type something bro");
@@ -54,12 +52,12 @@ function preset_work() {
 }
 
 function preset_school() {
-  CreatTask("Do some research for scienc")
-  CreatTask("Play Some amongus!")
+  CreateTask("Do some research for scienc")
+  CreateTask("Play Some amongus!")
   CreateTask("Do ELA homework")
 }
 
-function preset_fun() {
+async function preset_fun() {
   CreateTask("Make a videogame")
   CreateTask("Find a new friend")
   CreateTask("Listen to some greenday")
@@ -68,7 +66,7 @@ function preset_fun() {
 async function send_message() {
   const payload = {"message": "Hello from ur buddy javascript"};
   
-  const response await fetch ('http://127.0.0.1:5000/message', {
+  const response =  await fetch ('http://127.0.0.1:5000/message', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -78,7 +76,7 @@ async function send_message() {
 
   }); 
 
-  const result = await response.json;
+  const result = await response.json();
   
   console.log(result);
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask,  jsonify, request
 from flask_cors import CORS
 
 
@@ -8,14 +8,16 @@ CORS(app)
 
 @app.route('/message', methods=['POST'])
 
-def recieve_message():
+def receive_message():
     data = request.get_json()
 
     if not data or 'message' not in data:
-            return jsonify("status": "You  left me hanging bro with no message :(")
+        return jsonify({
+            "status": "You left me hanging bro with no message :("
+        })
 
     user_message = data['message']
-    print(f"Message from frontend: {user_message}"")
+    print(f"Message from frontend: {user_message}")
 
     return jsonify({
         "status": "sucsess",
