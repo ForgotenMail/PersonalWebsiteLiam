@@ -1,51 +1,149 @@
+document.addEventListener("DOMContentLoaded", () => {
+  get_all()
+});
+
 const todo_list = document.getElementById("todo_list");
 const todo_input = document.getElementById("todo_input");
 // Create the function
-function CreateTask(task_name) {
+
+async function create_task_DBSkip(task_name, completed,) {
+  console.log("CreateTask called with", task_name)
+  let inputValue;
+  if (task_name == undefined || task_name == null || task_name == "") {
+
+    if (todo_input.value == "") {
+      alert("Please actually type something bro");
+      return;
+    }
+    inputValue = todo_input.value;
+  }
+
+  else {
+    inputValue = task_name;
+  }
+
+
+  if (completed == null || completed == "" || completed == undefined) {
+    completed = false;
+
+  }
+
+
+
+
+
+  const span = document.createElement("span");
+  span.textContent = inputValue;
+
+  const todo_item = document.createElement("li");
+  todo_item.classList.add("todo_item");
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.checked = completed;
+
+  if (completed) {
+    span.style.textDecoration = "line-through"
+  }
+
+  checkbox.addEventListener("change", () => {
+    span.style.textDecoration = checkbox.checked ? "line-through" : "none";
+    checkedOff(inputValue);
+  });
+
+
+
+  const delete_btn = document.createElement("button");
+  delete_btn.textContent = "Delete";
+  delete_btn.classList.add("delete-button")
+
+  delete_btn.addEventListener("click", () => {
+    todo_list.removeChild(todo_item);
+    delete_element(inputValue)
+  });
+
+  todo_item.appendChild(checkbox);
+  todo_item.appendChild(span);
+  todo_item.appendChild(delete_btn);
+
+  todo_list.appendChild(todo_item);
+
+  todo_input.value = "";
+}
+async function CreateTask(task_name, completed,) {
   console.log("CreateTask called with", task_name)
   let inputValue;
 
   if (task_name == undefined || task_name == null || task_name == "") {
 
     if (todo_input.value == "") {
-        alert("Please actually type something bro");
-        return;
-      }
-     inputValue = todo_input.value;
-}
+      alert("Please actually type something bro");
+      return;
+    }
+    inputValue = todo_input.value;
+  }
 
   else {
-     inputValue = task_name;
+    inputValue = task_name;
   }
-    
 
-    const todo_item = document.createElement("li");
-    todo_item.classList.add("todo_item");
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
+  if (completed == null || completed == "" || completed == undefined) {
+    completed = false;
 
-    const span = document.createElement("span");
-    span.textContent = inputValue;
+  }
 
-    const delete_btn = document.createElement("button");
-    delete_btn.textContent = "Delete";
+  const status = await create_element(inputValue, completed);
 
-    delete_btn.addEventListener("click", () => {
-      todo_list.removeChild(todo_item);
-    });
+  if (status == "error") {
+    alert("You tried to create a task that already existed!")
+    return;
 
-    todo_item.appendChild(checkbox);
-    todo_item.appendChild(span);
-    todo_item.appendChild(delete_btn);
+  }
 
-    todo_list.appendChild(todo_item);
 
-    todo_input.value = "";
+
+
+  const span = document.createElement("span");
+  span.textContent = inputValue;
+
+  const todo_item = document.createElement("li");
+  todo_item.classList.add("todo_item");
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.checked = completed;
+
+  if (completed) {
+    span.style.textDecoration = "line-through"
+  }
+
+  checkbox.addEventListener("change", () => {
+    span.style.textDecoration = checkbox.checked ? "line-through" : "none";
+    checkedOff(inputValue);
+  });
+
+
+  const delete_btn = document.createElement("button");
+  delete_btn.textContent = "Delete";
+  delete_btn.classList.add("delete-button")
+
+  delete_btn.addEventListener("click", () => {
+    todo_list.removeChild(todo_item);
+    delete_element(inputValue)
+  });
+
+  todo_item.appendChild(checkbox);
+  todo_item.appendChild(span);
+  todo_item.appendChild(delete_btn);
+
+  todo_list.appendChild(todo_item);
+
+  todo_input.value = "";
 
 }
-
 function preset_work() {
+
   CreateTask("Find A girlfriend")
   CreateTask("Finish Project")
   CreateTask("Hit on coworkers ")
@@ -63,21 +161,106 @@ async function preset_fun() {
   CreateTask("Listen to some greenday")
 }
 
-async function send_message() {
-  const payload = {"message": "Hello from ur buddy javascript"};
-  
-  const response =  await fetch ('http://127.0.0.1:5000/message', {
+
+
+async function get_all() {
+
+  const response = await fetch('http://127.0.0.1:5000/gettasks');
+
+  const result = await response.json();
+
+  const tasks = result.tasks;
+
+  for (let i = 0; i < tasks.length; i++) {
+    console.log(tasks[i]);
+    let task = tasks[i];
+    const task_name = task.task_name;
+    const completed = task.completed;
+    create_task_DBSkip(task_name, completed);
+
+  }
+}
+
+
+async function create_element(task_name) {
+  const payload = { "task_name": task_name };
+
+  const response = await fetch('http://127.0.0.1:5000/addelement', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-    
+
     },
     body: JSON.stringify(payload)
 
-  }); 
+  });
 
   const result = await response.json();
-  
+
+  if (result.status == "error") {
+
+    return "error";
+  }
+
   console.log(result);
 
 }
+
+
+async function message() {
+  const payload = { "message": "this is a funny message from ur bro javascript" };
+
+  const response = await fetch('http://127.0.0.1:5000/message', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  console.log(result);
+
+}
+
+async function delete_element(task_name) {
+  const payload = { "task_name": task_name };
+
+  const response = await fetch('http://127.0.0.1:5000/deletetask', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  console.log(result);
+
+}
+
+async function checkedOff(task_name) {
+  const payload = { "task_name": task_name };
+
+  const response = await fetch('http://127.0.0.1:5000/checkoff', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  console.log(result);
+
+}
+

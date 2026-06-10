@@ -1,30 +1,158 @@
-  /* This is a comment */
-  
+/* === GLOBAL RESET / BASE === */
 body {
-  background-color: darkblue;
+  background-color: #020617; /* deep night */
+  color: #d1fae5; /* soft green text */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 0;
+  padding: 20px;
 }
 
+/* === TITLE === */
 h1 {
-  color: lightblue;
+  color: #22c55e; /* glowing green */
+  text-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
 }
-.todo_item {
-    width: 500px;
-    height: 100px;
-    background-color: #002d52; 
-  }
 
+/* === TODO LIST CONTAINER === */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* === TODO ITEM (CARD) === */
+.todo_item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 500px;
+  min-height: 60px;
+
+  background-color: #052e16; /* deep forest */
+  color: #d1fae5;
+
+  margin: 10px 0;
+  padding: 12px 15px;
+
+  border-radius: 10px;
+  border: 1px solid #14532d;
+
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.08);
+
+  transition: all 0.2s ease;
+}
+
+/* Hover = "system online" energy */
+.todo_item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 18px rgba(34, 197, 94, 0.2);
+}
+
+/* === CHECKBOX === */
+input[type="checkbox"] {
+  accent-color: #22c55e;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* === COMPLETED TASK === */
+.completed {
+  text-decoration: line-through;
+  color: #4b5563;
+  opacity: 0.6;
+}
+
+/* === BUTTONS === */
+button {
+  background-color: #14532d;
+  color: #d1fae5;
+
+  border: 1px solid #22c55e;
+  border-radius: 6px;
+
+  padding: 6px 10px;
+  margin-left: 8px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.presetbutton  {
+  background-color: #14532d;
+  color: #d1fae5;
+
+  border: 1px solid #22c55e;
+  border-radius: 6px;
+
+  padding: 6px 10px;
+  margin-left: 8px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+/* Hover glow */
+button:hover {
+  background-color: #166534;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+}
+
+/* Delete button = danger but still in theme */
+.delete-button {
+  background-color: #3f1d1d;
+  border: 1px solid #ef4444;
+}
+
+.delete-button:hover {
+  background-color: #7f1d1d;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+/* === INPUT FIELD === */
+#todo_input {
+  background-color: #052e16;
+  color: #d1fae5;
+
+  border: 1px solid #14532d;
+  border-radius: 6px;
+
+  padding: 8px;
+  margin-bottom: 15px;
+  width: 300px;
+
+  outline: none;
+}
+
+#todo_input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+
+/* === PRESET BOX === */
 .preset_box {
   position: absolute;
   top: 20px;
-  left: 250px;
-  width: 200px;
-  height: 300px;
-  background-color: brown;
+  right: 20px;
+
+  width: 220px;
+  padding: 15px;
+
+  background-color: #052e16;
+  color: #d1fae5;
+
+  border-radius: 10px;
+  border: 1px solid #14532d;
+
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.1);
 }
 
-ul {
-
-  list-style-type: none;
+/* === SUBTLE GLOBAL TRANSITIONS === */
+* {
+  transition: all 0.15s ease;
 }
-
