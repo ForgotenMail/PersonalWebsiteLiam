@@ -121,6 +121,33 @@ def delete_element():
 
     })
 
+@app.route('/checkoff', methods=['POST'])
+
+def checkedOff():
+    data = request.get_json()
+
+    if not data or 'task_name' not in data:
+        return jsonify({
+            "status": "You left me hanging bro with no message :("
+        })
+
+    user_message = data['task_name']
+
+    with psycopg.connect("dbname=liam user=liam") as conn:
+
+        # Open a cursor to perform database operations
+        with conn.cursor() as cur:
+            cur.execute(
+                       " UPDATE tasks SET completed = NOT completed WHERE task_name = %s;",
+                        
+                        (user_message,)
+                        )
+
+    return jsonify({
+        "status": "sucsess",
+        "reply": f"Flask recieved your message dude: {user_message}"
+
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
