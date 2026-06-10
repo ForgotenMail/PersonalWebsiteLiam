@@ -1,45 +1,164 @@
-<<<<<<< HEAD
-// This is a basic commnet
-//Getting ids for Item
+document.addEventListener("DOMContentLoaded", () => {
+  get_all()
+});
+
 const todo_list = document.getElementById("todo_list");
 const todo_input = document.getElementById("todo_input");
 // Create the function
-function sayHello() {
-  const inputValue = todo_input.value;
-  if (inputValue == "") {
-    alert("Please actually type something bro");
-    return;
-  }
-  const todo_item = document.createElement("li");
-  todo_item.textContent = inputValue;
-  //
-  // const checkbox = document.createElement("input");
-  // checkbox.type = "checkbox";
-  //
-  // const span = document.createElement("span");
-  // span.textContent = inputVaue;
-  //
-  // const delete_btn = document.createElement("button");
-  // delete_btn.textContent = "Delete";
-  //
-  // delete_btn.addEventListner("click", () => {
-  //   todo_list.removeChild(todo_item);
-  // });
-  //
- todo_list.appendChild(todo_item);
 
+async function create_task_DBSkip(task_name, completed,) {
+  console.log("CreateTask called with", task_name)
+  let inputValue;
+  if (task_name == undefined || task_name == null || task_name == "") {
+
+    if (todo_input.value == "") {
+      alert("Please actually type something bro");
+      return;
+    }
+    inputValue = todo_input.value;
+  }
+
+  else {
+    inputValue = task_name;
+  }
+
+
+  if (completed == null || completed == "" || completed == undefined) {
+    completed = false;
+
+  }
+
+
+
+
+
+  const span = document.createElement("span");
+  span.textContent = inputValue;
+
+  const todo_item = document.createElement("li");
+  todo_item.classList.add("todo_item");
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.checked = completed;
+
+  if (completed) {
+    span.style.textDecoration = "line-through"
+  }
+
+  checkbox.addEventListener("change", () => {
+    span.style.textDecoration = checkbox.checked ? "line-through" : "none";
+    checkedOff(inputValue);
+  });
+
+
+
+  const delete_btn = document.createElement("button");
+  delete_btn.textContent = "Delete";
+  delete_btn.classList.add("delete-button")
+
+  delete_btn.addEventListener("click", () => {
+    todo_list.removeChild(todo_item);
+    delete_element(inputValue)
+  });
+
+  todo_item.appendChild(checkbox);
+  todo_item.appendChild(span);
+  todo_item.appendChild(delete_btn);
+
+  todo_list.appendChild(todo_item);
+
+  todo_input.value = "";
+}
+async function CreateTask(task_name, completed,) {
+  console.log("CreateTask called with", task_name)
+  let inputValue;
+
+  if (task_name == undefined || task_name == null || task_name == "") {
+
+    if (todo_input.value == "") {
+      alert("Please actually type something bro");
+      return;
+    }
+    inputValue = todo_input.value;
+  }
+
+  else {
+    inputValue = task_name;
+  }
+
+
+  if (completed == null || completed == "" || completed == undefined) {
+    completed = false;
+
+  }
+
+  const status = await create_element(inputValue, completed);
+
+  if (status == "error") {
+    alert("You tried to create a task that already existed!")
+    return;
+
+  }
+
+
+
+
+  const span = document.createElement("span");
+  span.textContent = inputValue;
+
+  const todo_item = document.createElement("li");
+  todo_item.classList.add("todo_item");
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.checked = completed;
+
+  if (completed) {
+    span.style.textDecoration = "line-through"
+  }
+
+  checkbox.addEventListener("change", () => {
+    span.style.textDecoration = checkbox.checked ? "line-through" : "none";
+    checkedOff(inputValue);
+  });
+
+
+  const delete_btn = document.createElement("button");
+  delete_btn.textContent = "Delete";
+  delete_btn.classList.add("delete-button")
+
+  delete_btn.addEventListener("click", () => {
+    todo_list.removeChild(todo_item);
+    delete_element(inputValue)
+  });
+
+  todo_item.appendChild(checkbox);
+  todo_item.appendChild(span);
+  todo_item.appendChild(delete_btn);
+
+  todo_list.appendChild(todo_item);
 
   todo_input.value = "";
 
-=======
-// ============================================================
-// These load preset task lists onto the page
-// ============================================================
-function loadSchool() {
-    addTask("Do Homework");
-    addTask("Find A Girlfriend");
-    addTask("Talk to Parents about failing english");
->>>>>>> parent of 16f43fb (Basic working site (Has all aspects but presesets and it works!))
+}
+function preset_work() {
+
+  CreateTask("Find A girlfriend")
+  CreateTask("Finish Project")
+  CreateTask("Hit on coworkers ")
+}
+
+function preset_school() {
+  CreateTask("Do some research for scienc")
+  CreateTask("Play Some amongus!")
+  CreateTask("Do ELA homework")
+}
+
+async function preset_fun() {
+  CreateTask("Make a videogame")
+  CreateTask("Find a new friend")
+  CreateTask("Listen to some greenday")
 }
 
 function loadGroceries() {
@@ -55,84 +174,104 @@ function loadWork() {
     addTask("Find Yet Another Girlfriend");
 }
 
-// ============================================================
-// Adds a task to the page
-// taskText - the name of the task (also used as the ID in the database)
-// isCompleted - whether the task starts as completed (default false)
-// ============================================================
-function addTask(taskText, isCompleted = false) {
+async function get_all() {
 
-    let text;
+  const response = await fetch('http://127.0.0.1:5000/gettasks');
 
-    // If text passed in directly use that
-    if (taskText) {
-        text = taskText;
-    } else {
-        // Otherwise read from input box
-        const input = document.getElementById("taskInput");
-        text = input.value.trim();
-        input.value = "";
-    }
+  const result = await response.json();
 
-    // Stops empty tasks
-    if (text === "") return;
+  const tasks = result.tasks;
 
-    // Creates a new <li> element
-    const li = document.createElement("li");
+  for (let i = 0; i < tasks.length; i++) {
+    console.log(tasks[i]);
+    let task = tasks[i];
+    const task_name = task.task_name;
+    const completed = task.completed;
+    create_task_DBSkip(task_name, completed);
 
-    // Inserts HTML inside the task
-    // ADDED: data-task-name stores the name so we can find it later
-    li.innerHTML = `
-        <div class="task-left">
-            <input type="checkbox" ${isCompleted ? "checked" : ""}>
-            <span class="${isCompleted ? "completed" : ""}">${text}</span>
-        </div>
-        <button class="delete-btn">Delete</button>
-    `;
-
-    // Finds checkbox inside this specific task
-    const checkbox = li.querySelector("input");
-
-    // Finds text span inside this specific task
-    const span = li.querySelector("span");
-
-    // ============================================================
-    // THIS IS THE TOGGLE YOU ASKED FOR
-    // Runs when checkbox is clicked
-    // Gets the task name from the span text
-    // ============================================================
-    checkbox.addEventListener("change", () => {
-
-        // Gets the name of this specific task from the span text
-        // This is how we know WHICH task was clicked!
-        const taskName = span.textContent;
-        console.log(`Toggled task: ${taskName}`);
-
-        // Flips the completed styling on the page
-        span.classList.toggle("completed");
-
-        // Here is where you would call the database toggle
-        // (once you have a backend set up to connect the two files)
-        // toggleTask(taskName);
-    });
-
-    // Finds delete button inside this specific task
-    const deleteButton = li.querySelector(".delete-btn");
-
-    // Runs when delete button is clicked
-    deleteButton.addEventListener("click", () => {
-
-        // Gets the name of the task being deleted
-        const taskName = span.textContent;
-        console.log(`Deleted task: ${taskName}`);
-
-        // Removes task from page
-        li.remove();
-
-        // Here is where you would call the database delete
-        // deleteTask(taskName);
-    });
-
-    // Adds task to the list on the page
-    document.getElementById("taskList").appendChild(li);
+  }
 }
+
+
+async function create_element(task_name) {
+  const payload = { "task_name": task_name };
+
+  const response = await fetch('http://127.0.0.1:5000/addelement', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  if (result.status == "error") {
+
+    return "error";
+  }
+
+  console.log(result);
+
+}
+
+
+async function message() {
+  const payload = { "message": "this is a funny message from ur bro javascript" };
+
+  const response = await fetch('http://127.0.0.1:5000/message', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  console.log(result);
+
+}
+
+async function delete_element(task_name) {
+  const payload = { "task_name": task_name };
+
+  const response = await fetch('http://127.0.0.1:5000/deletetask', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  console.log(result);
+
+}
+
+async function checkedOff(task_name) {
+  const payload = { "task_name": task_name };
+
+  const response = await fetch('http://127.0.0.1:5000/checkoff', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  console.log(result);
+
+}
+
