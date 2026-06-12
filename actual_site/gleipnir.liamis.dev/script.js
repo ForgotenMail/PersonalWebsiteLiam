@@ -162,16 +162,16 @@ async function preset_fun() {
 }
 
 function loadGroceries() {
-    addTask("Go To store");
-    addTask("Get Lettuce");
-    addTask("Get another girlfriend");
+  addTask("Go To store");
+  addTask("Get Lettuce");
+  addTask("Get another girlfriend");
 }
 
 function loadWork() {
-    addTask("Stop Hitting on Secretary");
-    addTask("Stop Hitting on Boss");
-    addTask("Start hitting on some coworkers");
-    addTask("Find Yet Another Girlfriend");
+  addTask("Stop Hitting on Secretary");
+  addTask("Stop Hitting on Boss");
+  addTask("Start hitting on some coworkers");
+  addTask("Find Yet Another Girlfriend");
 }
 
 async function get_all() {
