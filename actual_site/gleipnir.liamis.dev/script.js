@@ -17,16 +17,12 @@ async function display_presets() {
   const presets = result.presets;
 
   for (const preset of presets) {
-    create_preset(preset);
+    create_preset(preset.name, preset.author, preset.desc)
   }
 
 }
 
 function create_preset(preset_name, preset_author, preset_desc) {
-
-  const preset_author = "Liam the Biam";
-
-  const preset_desc = "This is a test and only temporary";
   const preset_container = document.createElement("div");
   preset_container.classList.add("preset_container");
 
