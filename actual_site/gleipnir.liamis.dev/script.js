@@ -22,7 +22,7 @@ async function display_presets() {
 
 }
 
-function create_preset(preset_name) {
+function create_preset(preset_name, preset_author, preset_desc) {
 
   const preset_author = "Liam the Biam";
 

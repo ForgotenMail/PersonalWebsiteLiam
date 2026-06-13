@@ -29,7 +29,8 @@ with psycopg.connect("dbname=liam user=liam") as conn:
             CREATE TABLE IF NOT EXISTS presets (
             id SERIAL PRIMARY KEY,
             preset_name TEXT,
-            preset_desc TEXT
+            preset_desc TEXT,
+            preset_author TEXT DEFAULT 'liam the biam'
             )
             """)
             
@@ -211,6 +212,10 @@ def return_all_presets():
         # Open a cursor to perform database operations
         with conn.cursor() as cur:
             cur.execute("SELECT preset_name FROM presets;")
+
+            preset_names = [row[0] for row in cur.fetchall()]
+
+            cur.execute("SELECT  FROM presets;")
 
             preset_names = [row[0] for row in cur.fetchall()]
 
