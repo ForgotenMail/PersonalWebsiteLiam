@@ -1,11 +1,63 @@
 document.addEventListener("DOMContentLoaded", () => {
   get_all()
-});
+  display_presets()
+})
 
 const todo_list = document.getElementById("todo_list");
 const todo_input = document.getElementById("todo_input");
+const preset_list = document.getElementById("preset_list");
 // Create the function
 
+async function display_presets() {
+
+  const response = await fetch('http://127.0.0.1:5000/allpresets');
+
+  const result = await response.json();
+
+  const presets = result.presets;
+
+  for (const preset of presets) {
+    create_preset(preset);
+  }
+
+}
+
+function create_preset(preset_name) {
+
+  const preset_button = document.createElement("button");
+  preset_button.textContent = preset_name;
+  preset_button.classList.add("preset_button");
+
+  preset_button.addEventListener("click", () => {
+    load_preset(preset_name);
+  });
+  preset_list.appendChild(preset_button);
+
+}
+
+async function load_preset(preset_name) {
+
+  const payload = { "preset_name": preset_name };
+
+  const response = await fetch('http://127.0.0.1:5000/presets', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  const tasks = result.tasks;
+
+  for (const task of tasks) {
+    CreateTask(task);
+  }
+
+}
 async function create_task_DBSkip(task_name, completed,) {
   console.log("CreateTask called with", task_name)
   let inputValue;

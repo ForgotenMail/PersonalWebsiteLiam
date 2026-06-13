@@ -21,10 +21,9 @@ with psycopg.connect("dbname=liam user=liam") as conn:
             """)
         cur.execute("""
             CREATE TABLE IF NOT EXISTS preset_tasks (
-            id PRIMARY SERIAL KEY,
+            id SERIAL PRIMARY  KEY,
             task_name TEXT,
-            preset_name, TEXT
-
+            preset_name TEXT)
             """)
         cur.execute("""
             CREATE TABLE IF NOT EXISTS presets (
@@ -154,7 +153,7 @@ def checkedOff():
         # Open a cursor to perform database operations
         with conn.cursor() as cur:
             cur.execute(
-                       " UPDATE tasks SET completed = NOT completed WHERE task_name = %s;",
+                       " UPDATE task SET completed = NOT completed WHERE task_name = %s;",
                         
                         (user_message,)
                         )
@@ -203,5 +202,46 @@ def create_preset():
 
     })
 
+@app.route('/allpresets')
+
+def return_all_presets():
+
+    with psycopg.connect("dbname=liam user=liam") as conn:
+
+        # Open a cursor to perform database operations
+        with conn.cursor() as cur:
+            cur.execute("SELECT preset_name FROM presets;")
+
+            preset_names = [row[0] for row in cur.fetchall()]
+
+
+        return jsonify({
+            "presets": preset_names
+        })
+
+@app.route('/presets', methods=['POST'])
+
+def get_all_tasks_from_preset():
+    data = request.get_json()
+
+    if not data or 'preset_name' not in data:
+        return jsonify({
+            "status": "You left me hanging bro with no message :("
+        })
+
+    preset_name = data["preset_name"]
+    print(f"Message from frontend: {preset_name}")
+    
+    with psycopg.connect("dbname=liam user=liam") as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                        SELECT task_name FROM preset_tasks 
+                        WHERE preset_name = %s;
+                        """, (preset_name,))
+            tasks = [row[0] for row in cur.fetchall()]
+    return jsonify({
+        "status": "sucsess",
+        "tasks": tasks
+    })
 if __name__ == "__main__":
     app.run(debug=True)

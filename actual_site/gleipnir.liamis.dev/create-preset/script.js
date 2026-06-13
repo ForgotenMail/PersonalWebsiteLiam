@@ -51,7 +51,7 @@ async function CreateTask(completed) {
 
 }
 
-async function submitPreset() {
+async function SubmitPreset() {
   const preset_name = prompt("What is the name of the preset?");
   const preset_desc = prompt("Please enter in a breif description of your preset!")
   const response = await fetch('http://127.0.0.1:5000/create_preset', {
