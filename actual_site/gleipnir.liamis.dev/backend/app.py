@@ -19,6 +19,22 @@ with psycopg.connect("dbname=liam user=liam") as conn:
                 completed BOOLEAN DEFAULT FALSE
                 )
             """)
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS preset_tasks (
+            id PRIMARY SERIAL KEY,
+            task_name TEXT,
+            preset_name, TEXT
+
+            """)
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS presets (
+            id SERIAL PRIMARY KEY,
+            preset_name TEXT,
+            preset_desc TEXT
+            )
+            """)
+            
+            
         
 @app.route('/gettasks', methods=['GET'])
 def get_tasks():
@@ -146,6 +162,44 @@ def checkedOff():
     return jsonify({
         "status": "sucsess",
         "reply": f"Flask recieved your message dude: {user_message}"
+
+    })
+
+@app.route('/create_preset', methods=['POST'])
+
+def create_preset():
+    data = request.get_json()
+
+    if not data or 'task_list' not in data:
+        return jsonify({
+            "status": "You left me hanging bro with no message :("
+        })
+
+    tasks = data['task_list']
+    preset_name = data['preset_name']
+    preset_desc = data['preset_desc']
+
+    with psycopg.connect("dbname=liam user=liam") as conn:
+
+        # Open a cursor to perform database operations
+        with conn.cursor() as cur:
+
+            cur.execute("""
+                INSERT INTO presets (preset_name, preset_desc) VALUES (%s, %s)
+            """,
+            (preset_name, preset_desc,)
+            )
+
+            for task in tasks:
+                cur.execute("""
+                            INSERT INTO preset_tasks (task_name, preset_name)  VALUES (%s, %s)
+                            
+                            """,
+                            (task, preset_name,)
+                            )
+    return jsonify({
+        "status": "sucsess",
+        "reply": f"Flask recieved your message dude: {data}"
 
     })
 
