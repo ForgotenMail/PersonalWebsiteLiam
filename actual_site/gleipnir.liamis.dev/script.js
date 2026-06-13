@@ -24,14 +24,42 @@ async function display_presets() {
 
 function create_preset(preset_name) {
 
-  const preset_button = document.createElement("button");
-  preset_button.textContent = preset_name;
-  preset_button.classList.add("preset_button");
+  const preset_author = "Liam the Biam";
 
-  preset_button.addEventListener("click", () => {
+  const preset_desc = "This is a test and only temporary";
+  const preset_container = document.createElement("div");
+  preset_container.classList.add("preset_container");
+
+  const title = document.createElement("h1");
+  title.textContent = `${preset_name} Author: ${preset_author}`;
+
+  const description = document.createElement("p");
+  description.textContent = preset_desc;
+  description.classList.add("preset_desc");
+
+  const summon_button = document.createElement("button");
+  summon_button.textContent = "Summon";
+  summon_button.classList.add("preset_summon");
+
+  const delete_button = document.createElement("button");
+  delete_button.textContent = "DELETE";
+  delete_button.classList.add("delete-button");
+
+  summon_button.addEventListener("click", () => {
     load_preset(preset_name);
   });
-  preset_list.appendChild(preset_button);
+
+  delete_button.addEventListener("click", () => {
+    preset_container.remove();
+    preset_delete(preset_name);
+  });
+
+  preset_container.appendChild(title);
+  preset_container.appendChild(description);
+  preset_container.appendChild(summon_button);
+  preset_container.appendChild(delete_button);
+
+  preset_list.appendChild(preset_container);
 
 }
 
@@ -312,6 +340,25 @@ async function checkedOff(task_name) {
   const payload = { "task_name": task_name };
 
   const response = await fetch('http://127.0.0.1:5000/checkoff', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  console.log(result);
+
+}
+
+async function preset_delete(preset_name) {
+  const payload = { "preset_name": preset_name };
+
+  const response = await fetch('http://127.0.0.1:5000/delete_preset', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

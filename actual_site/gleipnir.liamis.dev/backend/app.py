@@ -243,5 +243,36 @@ def get_all_tasks_from_preset():
         "status": "sucsess",
         "tasks": tasks
     })
+
+
+@app.route('/delete_preset', methods=['POST'])
+
+def delete_presets():
+    data = request.get_json()
+
+    if not data or 'preset_name' not in data:
+        return jsonify({
+            "status": "You left me hanging bro with no message :("
+        })
+
+    preset_name = data["preset_name"]
+    print(f"Message from frontend: {preset_name}")
+    
+    with psycopg.connect("dbname=liam user=liam") as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                        DELETE FROM preset_tasks 
+                        WHERE preset_name = %s;
+                        """, (preset_name,))
+
+    with psycopg.connect("dbname=liam user=liam") as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                        DELETE FROM presets 
+                        WHERE preset_name = %s;
+                        """, (preset_name,))
+    return jsonify({
+        "status": "sucsess",
+    })
 if __name__ == "__main__":
     app.run(debug=True)
