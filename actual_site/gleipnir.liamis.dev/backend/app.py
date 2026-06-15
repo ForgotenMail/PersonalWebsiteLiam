@@ -16,8 +16,13 @@ with psycopg.connect("dbname=liam user=liam") as conn:
         cur.execute("""
             CREATE TABLE IF NOT EXISTS task (
                 task_name text PRIMARY KEY,
-                completed BOOLEAN DEFAULT FALSE
+                completed BOOLEAN DEFAULT FALSE,
+                assigned_to TEXT DEFAULT 'No one'
                 )
+            """)
+        cur.execute("""
+            ALTER TABLE task
+            ADD COLUMN IF NOT EXISTS assigned_to TEXT DEFAULT 'No one'
             """)
         cur.execute("""
             CREATE TABLE IF NOT EXISTS preset_tasks (
@@ -40,11 +45,11 @@ with psycopg.connect("dbname=liam user=liam") as conn:
 def get_tasks():
     with psycopg.connect("dbname=liam user=liam") as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT task_name, completed FROM task;")
+            cur.execute("SELECT task_name, completed, COALESCE(assigned_to, 'No one') FROM task;")
             rows = cur.fetchall()
 
     tasks = [
-        {"task_name": row[0], "completed": row[1]}
+        {"task_name": row[0], "completed": row[1], "assigned_to": row[2]}
         for row in rows
     ]
 
@@ -163,6 +168,30 @@ def checkedOff():
         "status": "sucsess",
         "reply": f"Flask recieved your message dude: {user_message}"
 
+    })
+
+@app.route('/assigntask', methods=['POST'])
+def assign_task():
+    data = request.get_json()
+
+    if not data or 'task_name' not in data or 'assigned_to' not in data:
+        return jsonify({
+            "status": "You left me hanging bro with no task or person :("
+        })
+
+    task_name = data['task_name']
+    assigned_to = data['assigned_to'] or 'No one'
+
+    with psycopg.connect("dbname=liam user=liam") as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE task SET assigned_to = %s WHERE task_name = %s;",
+                (assigned_to, task_name,)
+            )
+
+    return jsonify({
+        "status": "sucsess",
+        "reply": f"Assigned {task_name} to {assigned_to}"
     })
 
 @app.route('/create_preset', methods=['POST'])

@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const todo_list = document.getElementById("todo_list");
 const todo_input = document.getElementById("todo_input");
 const preset_list = document.getElementById("preset_list");
+const assigneeOptions = ["No one", "Liam", "Zippy", "Ben", "Eli", "Anika", "Janie", "Global"];
 // Create the function
 
 async function display_presets() {
@@ -78,11 +79,11 @@ async function load_preset(preset_name) {
   const tasks = result.tasks;
 
   for (const task of tasks) {
-    CreateTask(task);
+    CreateTask(task, false, "No one");
   }
 
 }
-async function create_task_DBSkip(task_name, completed,) {
+async function create_task_DBSkip(task_name, completed, assigned_to) {
   console.log("CreateTask called with", task_name)
   let inputValue;
   if (task_name == undefined || task_name == null || task_name == "") {
@@ -104,9 +105,9 @@ async function create_task_DBSkip(task_name, completed,) {
 
   }
 
-
-
-
+  if (assigned_to == null || assigned_to == "" || assigned_to == undefined) {
+    assigned_to = "No one";
+  }
 
   const span = document.createElement("span");
   span.textContent = inputValue;
@@ -138,15 +139,18 @@ async function create_task_DBSkip(task_name, completed,) {
     delete_element(inputValue)
   });
 
+  const assignee_dropdown = create_assignee_dropdown(inputValue, assigned_to);
+
   todo_item.appendChild(checkbox);
   todo_item.appendChild(span);
+  todo_item.appendChild(assignee_dropdown);
   todo_item.appendChild(delete_btn);
 
   todo_list.appendChild(todo_item);
 
   todo_input.value = "";
 }
-async function CreateTask(task_name, completed,) {
+async function CreateTask(task_name, completed, assigned_to) {
   console.log("CreateTask called with", task_name)
   let inputValue;
 
@@ -167,6 +171,10 @@ async function CreateTask(task_name, completed,) {
   if (completed == null || completed == "" || completed == undefined) {
     completed = false;
 
+  }
+
+  if (assigned_to == null || assigned_to == "" || assigned_to == undefined) {
+    assigned_to = "No one";
   }
 
   const status = await create_element(inputValue, completed);
@@ -209,14 +217,48 @@ async function CreateTask(task_name, completed,) {
     delete_element(inputValue)
   });
 
+  const assignee_dropdown = create_assignee_dropdown(inputValue, assigned_to);
+
   todo_item.appendChild(checkbox);
   todo_item.appendChild(span);
+  todo_item.appendChild(assignee_dropdown);
   todo_item.appendChild(delete_btn);
 
   todo_list.appendChild(todo_item);
 
   todo_input.value = "";
 
+}
+
+function create_assignee_dropdown(task_name, assigned_to) {
+  const wrapper = document.createElement("label");
+  wrapper.classList.add("assignee_dropdown_wrapper");
+
+  const labelText = document.createElement("span");
+  labelText.textContent = "Assigned to";
+  labelText.classList.add("assignee_label");
+
+  const select = document.createElement("select");
+  select.classList.add("assignee_dropdown");
+  select.setAttribute("aria-label", `Assign ${task_name} to someone`);
+
+  for (const person of assigneeOptions) {
+    const option = document.createElement("option");
+    option.value = person;
+    option.textContent = person;
+    select.appendChild(option);
+  }
+
+  select.value = assigneeOptions.includes(assigned_to) ? assigned_to : "No one";
+
+  select.addEventListener("change", () => {
+    assign_task(task_name, select.value);
+  });
+
+  wrapper.appendChild(labelText);
+  wrapper.appendChild(select);
+
+  return wrapper;
 }
 function preset_work() {
 
@@ -263,7 +305,8 @@ async function get_all() {
     let task = tasks[i];
     const task_name = task.task_name;
     const completed = task.completed;
-    create_task_DBSkip(task_name, completed);
+    const assigned_to = task.assigned_to;
+    create_task_DBSkip(task_name, completed, assigned_to);
 
   }
 }
@@ -336,6 +379,25 @@ async function checkedOff(task_name) {
   const payload = { "task_name": task_name };
 
   const response = await fetch('http://127.0.0.1:5000/checkoff', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify(payload)
+
+  });
+
+  const result = await response.json();
+
+  console.log(result);
+
+}
+
+async function assign_task(task_name, assigned_to) {
+  const payload = { "task_name": task_name, "assigned_to": assigned_to };
+
+  const response = await fetch('http://127.0.0.1:5000/assigntask', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
