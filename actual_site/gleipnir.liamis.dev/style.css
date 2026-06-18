@@ -184,7 +184,12 @@ button:hover {
   transition: transform 0.3s ease;
 
   z-index: 20;
+}
 
+.test-plan-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   overflow-y: auto;
 }
 
@@ -195,7 +200,7 @@ button:hover {
 .test-plans-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
 
   padding: 20px;
   padding-bottom: 10px;
@@ -205,12 +210,36 @@ button:hover {
 
 .test-plans-header h3 {
   margin: 0;
+  flex: 1;
 
   font-size: 18px;
   font-weight: 600;
   color: #22c55e;
 
   letter-spacing: 0.5px;
+}
+
+.test-plans-back {
+  background-color: transparent;
+  color: #22c55e;
+
+  border: 1px solid #14532d;
+  border-radius: 6px;
+
+  padding: 4px 10px;
+
+  cursor: pointer;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  transition: all 0.2s ease;
+}
+
+.test-plans-back:hover {
+  background-color: #064e3b;
+  border-color: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
 }
 
 .test-plans-close {
@@ -233,6 +262,56 @@ button:hover {
 .test-plans-close:hover {
   background-color: #7f1d1d;
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.test-plan-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 20px;
+  flex: 1;
+}
+
+.test-plan-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+
+  width: 100%;
+  padding: 10px 14px;
+
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+
+  color: #d1fae5;
+  font-family: inherit;
+  font-size: 13px;
+
+  cursor: pointer;
+  text-align: left;
+
+  transition: all 0.2s ease;
+}
+
+.test-plan-btn:hover {
+  background-color: #064e3b;
+  border-color: #14532d;
+  transform: translateX(4px);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.15);
+}
+
+.test-plan-btn-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.test-plan-btn-desc {
+  font-size: 11px;
+  color: #86efac;
+  opacity: 0.8;
 }
 
 .test-plans-content {
