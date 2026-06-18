@@ -373,9 +373,7 @@ Before:</label></li>
 <li>
 <p><label style="cursor:pointer;display:inline-flex;align-items:flex-start;gap:6px;"><input type="checkbox" style="margin-top:3px;accent-color:#22c55e;flex-shrink:0;">Action: Hover your mouse over “A technician may enter even if I am not home”</label></p>
 </li>
-<li>
-<p><label style="cursor:pointer;display:inline-flex;align-items:flex-start;gap:6px;"><input type="checkbox" style="margin-top:3px;accent-color:#22c55e;flex-shrink:0;"></label></p>
-</li>
+
 <li>
 <p><label style="cursor:pointer;display:inline-flex;align-items:flex-start;gap:6px;"><input type="checkbox" style="margin-top:3px;accent-color:#22c55e;flex-shrink:0;">Result: The button is outlined in blue and the box turns gray (I am unable to provide screenshots, but it’s similar to other mouse hovering characteristics of this website except its blue and the box is gray)</label></p>
 </li>
