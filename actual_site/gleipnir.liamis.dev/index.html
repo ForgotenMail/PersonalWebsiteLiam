@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -12,9 +12,18 @@
 
       <a class="sidebar-item" href="http://localhost:5173/create-preset/">Create a preset</a>
 
-      <a class="sidebar-item" href="http://localhost:5173/test-plans/">Test Plans</a>
+      <span class="sidebar-item" onclick="toggleTestPlans()">Test Plans</span>
 
      </div>
+
+      <div id="test-plans-panel" class="test-plans-panel">
+        <div class="test-plans-header">
+          <h3>Test Plans</h3>
+          <button class="test-plans-close" onclick="toggleTestPlans()">X</button>
+        </div>
+        <div id="test-plans-content" class="test-plans-content"></div>
+      </div>
+
       <h1>To Do List</h1>
       <input id="todo_input" type="text" name="todo" placeholder="Enter your next itme of buisness!">
       <button onclick="CreateTask()">Submit</button> 
@@ -31,5 +40,5 @@
 
   </body>
   <link href="style.css" rel="stylesheet">
-  <script src="script.js" defer></script>
+  <script type="module" src="script.js" defer></script>
 </html>

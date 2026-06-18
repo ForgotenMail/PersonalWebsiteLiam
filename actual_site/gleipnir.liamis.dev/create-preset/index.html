@@ -1,9 +1,9 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Gleipnir Preset Creaor</title>
+    <title>Gleipnir Preset Creator</title>
   </head>
   <body>
       <h1>Preset Creator</h1>
@@ -11,9 +11,31 @@
      </p>
      <p><i>Btw, the preset will contain the exact tasks that this todolist has, if that was not clear</i></p>
       <input id="todo_input" type="text" name="todo" placeholder="Enter your next itme of buisness!">
-      <button onclick="CreateTask()">Submit</button> 
-      <button onclick="SubmitPreset()">Create Preset</button> 
+      <button onclick="window.CreateTask()">Submit</button> 
+      <button onclick="window.SubmitPreset()">Create Preset</button> 
 
+      <div id="preset-modal" class="preset-modal hidden">
+        <div class="preset-modal-content">
+          <h2>Name Thy Preset</h2>
+          <p class="preset-modal-hint">Give thy quest list a name for the ages!</p>
+
+          <label class="preset-modal-label" for="preset-name-input">Preset Name</label>
+          <input id="preset-name-input" class="preset-modal-input" type="text" placeholder="e.g. Weekend Grind">
+
+          <label class="preset-modal-label" for="preset-author-input">Author</label>
+          <input id="preset-author-input" class="preset-modal-input" type="text" placeholder="e.g. Liam">
+
+          <label class="preset-modal-label" for="preset-desc-input">Description</label>
+          <textarea id="preset-desc-input" class="preset-modal-textarea" rows="3" placeholder="What be this preset about?"></textarea>
+
+          <div class="preset-modal-actions">
+            <button class="preset-modal-cancel" onclick="window.cancelPresetModal()">Cancel</button>
+            <button class="preset-modal-confirm" onclick="window.confirmPresetModal()">Create Preset</button>
+          </div>
+
+          <p id="preset-modal-error" class="preset-modal-error hidden"></p>
+        </div>
+      </div>
 
       <ul id="todo_list">
 

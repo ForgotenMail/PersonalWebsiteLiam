@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "vite": "^8.0.14"
+  },
+  "dependencies": {
+    "markdown-it": "^14.2.0"
   }
 }

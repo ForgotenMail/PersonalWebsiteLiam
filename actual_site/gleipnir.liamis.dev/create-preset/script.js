@@ -3,7 +3,7 @@ const todo_input = document.getElementById("todo_input");
 
 const task_list = []
 
-async function CreateTask(completed) {
+window.CreateTask = async function CreateTask(completed) {
   console.log("CreateTask called with", todo_input.value)
   let inputValue = todo_input.value
 
@@ -12,7 +12,6 @@ async function CreateTask(completed) {
     return;
   }
   task_list.push(inputValue)
-
 
   const span = document.createElement("span");
   span.textContent = inputValue;
@@ -32,7 +31,6 @@ async function CreateTask(completed) {
     span.style.textDecoration = checkbox.checked ? "line-through" : "none";
   });
 
-
   const delete_btn = document.createElement("button");
   delete_btn.textContent = "Delete";
   delete_btn.classList.add("delete-button")
@@ -48,12 +46,38 @@ async function CreateTask(completed) {
   todo_list.appendChild(todo_item);
 
   todo_input.value = "";
-
 }
 
-async function SubmitPreset() {
-  const preset_name = prompt("What is the name of the preset?");
-  const preset_desc = prompt("Please enter in a breif description of your preset!")
+window.SubmitPreset = async function SubmitPreset() {
+  document.getElementById("preset-modal").classList.remove("hidden");
+  document.getElementById("preset-name-input").focus();
+}
+
+window.cancelPresetModal = function() {
+  document.getElementById("preset-modal").classList.add("hidden");
+  document.getElementById("preset-modal-error").classList.add("hidden");
+}
+
+window.confirmPresetModal = async function() {
+  const preset_name = document.getElementById("preset-name-input").value.trim();
+  const preset_author = document.getElementById("preset-author-input").value.trim();
+  const preset_desc = document.getElementById("preset-desc-input").value.trim();
+  const errEl = document.getElementById("preset-modal-error");
+
+  if (!preset_name) {
+    errEl.textContent = "Thou must name thy preset!";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  if (!preset_desc) {
+    errEl.textContent = "A description would be nice, traveler!";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  errEl.classList.add("hidden");
+
   const response = await fetch('http://127.0.0.1:5000/create_preset', {
     method: 'POST',
     headers: {
@@ -64,7 +88,7 @@ async function SubmitPreset() {
       task_list: task_list,
       preset_name: preset_name,
       preset_desc: preset_desc,
-
+      preset_author: preset_author || undefined,
     }),
   });
 
@@ -72,6 +96,8 @@ async function SubmitPreset() {
 
   console.log(result);
 
-
+  document.getElementById("preset-modal").classList.add("hidden");
+  document.getElementById("preset-name-input").value = "";
+  document.getElementById("preset-author-input").value = "";
+  document.getElementById("preset-desc-input").value = "";
 }
-

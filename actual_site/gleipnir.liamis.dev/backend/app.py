@@ -207,6 +207,7 @@ def create_preset():
     tasks = data['task_list']
     preset_name = data['preset_name']
     preset_desc = data['preset_desc']
+    preset_author = data.get('preset_author', 'liam the biam')
 
     with psycopg.connect("dbname=liam user=liam") as conn:
 
@@ -214,9 +215,9 @@ def create_preset():
         with conn.cursor() as cur:
 
             cur.execute("""
-                INSERT INTO presets (preset_name, preset_desc) VALUES (%s, %s)
+                INSERT INTO presets (preset_name, preset_desc, preset_author) VALUES (%s, %s, %s)
             """,
-            (preset_name, preset_desc,)
+            (preset_name, preset_desc, preset_author)
             )
 
             for task in tasks:

@@ -1,3 +1,70 @@
+import markdownIt from 'markdown-it';
+
+const md = markdownIt();
+
+const testPlansMarkdown = `# Gleipnir — Test Plans
+
+A brave QA traveler must verify these sacred quests before the realm is deemed stable.
+
+---
+
+## 1. Core Quest Flow
+
+- [ ] Create a task by typing in the input and clicking **Submit**
+- [ ] Verify the task appears in the list with a checkbox and delete button
+- [ ] Check the checkbox — task should get struck through
+- [ ] Uncheck the checkbox — strikethrough should disappear
+- [ ] Click **Delete** — task should vanish from the list
+- [ ] Try submitting an empty input — should see an alert
+
+## 2. Preset System
+
+- [ ] Click **Summon** on a preset — tasks should populate the list
+- [ ] Click **DELETE** on a preset — preset should disappear
+- [ ] Verify preset tasks get created with correct names
+
+## 3. Assignee Feature
+
+- [ ] Change the assignee dropdown on a task
+- [ ] Refresh the page — assignee should persist
+- [ ] Verify the dropdown shows all options: No one, Liam, Zippy, Ben, Eli, Anika, Janie, Global
+
+## 4. Backend Resilience
+
+- [ ] Kill the Flask server, then try to create a task — should handle gracefully
+- [ ] Restart the server, refresh — tasks should load from DB
+- [ ] Check the PostgreSQL database directly:
+  \\\`\\\`\\\`
+  psql -U liam -d funnytodo -c "SELECT * FROM task"
+  \\\`\\\`\\\`
+
+## 5. Edge Cases
+
+- [ ] Create a task with the same name twice — should show "already exists" error
+- [ ] Create many tasks and verify scrolling works
+- [ ] Check a task, delete it, then check the DB still has the others
+- [ ] Test with special characters: \\\`~!@#$%^&*()_+-=[]{}|;':",./<>\`?
+
+---
+
+*"A bug found today is a dragon slain before the morrow."*
+`;
+
+function renderTestPlans() {
+  const content = document.getElementById("test-plans-content");
+  if (!content) return;
+  content.innerHTML = md.render(testPlansMarkdown);
+}
+
+window.toggleTestPlans = function() {
+  const panel = document.getElementById("test-plans-panel");
+  if (!panel) return;
+  panel.classList.toggle("open");
+  if (panel.classList.contains("open")) {
+    renderTestPlans();
+  }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   get_all()
   display_presets()
@@ -150,7 +217,7 @@ async function create_task_DBSkip(task_name, completed, assigned_to) {
 
   todo_input.value = "";
 }
-async function CreateTask(task_name, completed, assigned_to) {
+window.CreateTask = async function CreateTask(task_name, completed, assigned_to) {
   console.log("CreateTask called with", task_name)
   let inputValue;
 
