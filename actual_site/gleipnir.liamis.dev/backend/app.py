@@ -383,5 +383,30 @@ def create_test_plan():
         }), 500
 
 
+@app.route('/delete_test_plan', methods=['POST'])
+def delete_test_plan():
+    data = request.get_json()
+
+    if not data or 'key' not in data:
+        return jsonify({
+            "status": "error",
+            "message": "Missing required field: key"
+        })
+
+    key = data['key']
+
+    with psycopg.connect("dbname=liam user=liam") as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                DELETE FROM test_plans
+                WHERE key = %s;
+            """, (key,))
+
+    return jsonify({
+        "status": "success",
+        "message": f"Test plan '{key}' deleted"
+    })
+
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -58,6 +58,7 @@ async function initTestPlansFromDB() {
       for (const plan of result.test_plans) {
         const exists = testPlans.some(p => p.key === plan.key);
         if (!exists) {
+          plan.fromDB = true;
           testPlans.push(plan);
         }
       }
@@ -120,7 +121,9 @@ window.confirmCreateTestPlanModal = async function() {
     return;
   }
 
-  testPlans.push(result.test_plan);
+  const newPlan = result.test_plan;
+  newPlan.fromDB = true;
+  testPlans.push(newPlan);
   renderTestPlanSelector();
 
   document.getElementById("create-test-plan-modal").classList.add("hidden");
@@ -148,6 +151,17 @@ function renderTestPlanSelector() {
     btn.appendChild(nameSpan);
     btn.appendChild(descSpan);
 
+    if (plan.fromDB) {
+      const deleteBtn = document.createElement("span");
+      deleteBtn.className = "test-plan-delete";
+      deleteBtn.textContent = "X";
+      deleteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        deleteTestPlan(plan.key);
+      });
+      btn.appendChild(deleteBtn);
+    }
+
     btn.addEventListener("click", () => {
       activeTestPlan = plan.key;
       openTestPlan();
@@ -155,6 +169,22 @@ function renderTestPlanSelector() {
 
     selector.appendChild(btn);
   });
+}
+
+async function deleteTestPlan(key) {
+  await fetch('http://127.0.0.1:5000/delete_test_plan', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ key: key }),
+  });
+
+  const idx = testPlans.findIndex(p => p.key === key);
+  if (idx !== -1) {
+    testPlans.splice(idx, 1);
+  }
+  renderTestPlanSelector();
 }
 
 function openTestPlan() {

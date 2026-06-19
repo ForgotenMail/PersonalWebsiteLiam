@@ -273,6 +273,7 @@ button:hover {
 }
 
 .test-plan-btn {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -312,6 +313,32 @@ button:hover {
   font-size: 11px;
   color: #86efac;
   opacity: 0.8;
+}
+
+.test-plan-delete {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+
+  background-color: #3f1d1d;
+  color: #d1fae5;
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+
+  padding: 2px 7px;
+
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.test-plan-delete:hover {
+  background-color: #7f1d1d;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
 }
 
 .test-plans-content {
