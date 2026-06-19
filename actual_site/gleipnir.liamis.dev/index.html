@@ -12,9 +12,34 @@
 
       <a class="sidebar-item" href="http://localhost:5173/create-preset/">Create a preset</a>
 
+      <span class="sidebar-item" onclick="openCreateTestPlanModal()">Create Test Plan</span>
+
       <span class="sidebar-item" onclick="toggleTestPlans()">Test Plans</span>
 
      </div>
+
+      <div id="create-test-plan-modal" class="preset-modal hidden">
+        <div class="preset-modal-content">
+          <h2>Create Test Plan</h2>
+          <p class="preset-modal-hint">Forge a new test plan to guide thy QA crusade!</p>
+
+          <label class="preset-modal-label" for="test-plan-title-input">Title</label>
+          <input id="test-plan-title-input" class="preset-modal-input" type="text" placeholder="e.g. Login Flow Tests">
+
+          <label class="preset-modal-label" for="test-plan-desc-input">Description</label>
+          <input id="test-plan-desc-input" class="preset-modal-input" type="text" placeholder="What be this test plan about?">
+
+          <label class="preset-modal-label" for="test-plan-markdown-input">Markdown Content</label>
+          <textarea id="test-plan-markdown-input" class="preset-modal-textarea" rows="8" placeholder="Write thy test checklist in markdown..."></textarea>
+
+          <div class="preset-modal-actions">
+            <button class="preset-modal-cancel" onclick="cancelCreateTestPlanModal()">Cancel</button>
+            <button class="preset-modal-confirm" onclick="confirmCreateTestPlanModal()">Create</button>
+          </div>
+
+          <p id="create-test-plan-error" class="preset-modal-error hidden"></p>
+        </div>
+      </div>
 
       <div id="test-plans-panel" class="test-plans-panel">
         <div id="test-plan-selector-screen" class="test-plan-screen">

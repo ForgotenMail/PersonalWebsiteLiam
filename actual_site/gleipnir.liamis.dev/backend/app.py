@@ -38,6 +38,15 @@ with psycopg.connect("dbname=liam user=liam") as conn:
             preset_author TEXT DEFAULT 'liam the biam'
             )
             """)
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS test_plans (
+            id SERIAL PRIMARY KEY,
+            key TEXT UNIQUE NOT NULL,
+            title TEXT NOT NULL,
+            description TEXT,
+            markdown TEXT
+            )
+            """)
             
             
         
@@ -311,5 +320,68 @@ def delete_presets():
     return jsonify({
         "status": "sucsess",
     })
+@app.route('/test_plans', methods=['GET'])
+def get_test_plans():
+    with psycopg.connect("dbname=liam user=liam") as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT key, title, description, markdown FROM test_plans ORDER BY id;")
+            test_plans = [
+                {
+                    "key": row[0],
+                    "name": row[1],
+                    "description": row[2],
+                    "markdown": row[3]
+                }
+                for row in cur.fetchall()
+            ]
+    return jsonify({
+        "status": "success",
+        "test_plans": test_plans
+    })
+
+
+@app.route('/create_test_plan', methods=['POST'])
+def create_test_plan():
+    data = request.get_json()
+
+    if not data or 'title' not in data or 'markdown' not in data:
+        return jsonify({
+            "status": "error",
+            "message": "Missing required fields: title, markdown"
+        })
+
+    title = data['title']
+    description = data.get('description', '')
+    markdown = data['markdown']
+    key = title.lower().replace(' ', '_').replace('-', '_')
+
+    try:
+        with psycopg.connect("dbname=liam user=liam") as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO test_plans (key, title, description, markdown)
+                    VALUES (%s, %s, %s, %s)
+                """, (key, title, description, markdown))
+        return jsonify({
+            "status": "success",
+            "test_plan": {
+                "key": key,
+                "name": title,
+                "description": description,
+                "markdown": markdown
+            }
+        })
+    except errors.UniqueViolation:
+        return jsonify({
+            "status": "error",
+            "message": "A test plan with this title already exists"
+        })
+    except psycopg.Error as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
 if __name__ == "__main__":
     app.run(debug=True)

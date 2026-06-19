@@ -50,6 +50,85 @@ const testPlans = [
 
 let activeTestPlan = 'compliance';
 
+async function initTestPlansFromDB() {
+  try {
+    const response = await fetch('http://127.0.0.1:5000/test_plans');
+    const result = await response.json();
+    if (result.test_plans) {
+      for (const plan of result.test_plans) {
+        const exists = testPlans.some(p => p.key === plan.key);
+        if (!exists) {
+          testPlans.push(plan);
+        }
+      }
+    }
+  } catch (err) {
+    console.log('Could not load test plans from DB:', err);
+  }
+}
+
+window.openCreateTestPlanModal = function() {
+  document.getElementById("create-test-plan-modal").classList.remove("hidden");
+  document.getElementById("test-plan-title-input").focus();
+};
+
+window.cancelCreateTestPlanModal = function() {
+  document.getElementById("create-test-plan-modal").classList.add("hidden");
+  document.getElementById("create-test-plan-error").classList.add("hidden");
+  document.getElementById("test-plan-title-input").value = "";
+  document.getElementById("test-plan-desc-input").value = "";
+  document.getElementById("test-plan-markdown-input").value = "";
+};
+
+window.confirmCreateTestPlanModal = async function() {
+  const title = document.getElementById("test-plan-title-input").value.trim();
+  const description = document.getElementById("test-plan-desc-input").value.trim();
+  const markdown = document.getElementById("test-plan-markdown-input").value.trim();
+  const errEl = document.getElementById("create-test-plan-error");
+
+  if (!title) {
+    errEl.textContent = "Thou must name thy test plan!";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  if (!markdown) {
+    errEl.textContent = "Markdown content is required, traveler!";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  errEl.classList.add("hidden");
+
+  const response = await fetch('http://127.0.0.1:5000/create_test_plan', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      title: title,
+      description: description,
+      markdown: markdown
+    }),
+  });
+
+  const result = await response.json();
+
+  if (result.status === "error") {
+    errEl.textContent = result.message || "Creation failed!";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  testPlans.push(result.test_plan);
+  renderTestPlanSelector();
+
+  document.getElementById("create-test-plan-modal").classList.add("hidden");
+  document.getElementById("test-plan-title-input").value = "";
+  document.getElementById("test-plan-desc-input").value = "";
+  document.getElementById("test-plan-markdown-input").value = "";
+};
+
 function renderTestPlanSelector() {
   const selector = document.getElementById("test-plan-selector");
   if (!selector) return;
@@ -112,13 +191,14 @@ window.toggleTestPlans = function() {
   panel.classList.toggle("open");
   if (panel.classList.contains("open")) {
     backToSelector();
-    renderTestPlanSelector();
+    initTestPlansFromDB().then(() => renderTestPlanSelector());
   }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   get_all()
   display_presets()
+  initTestPlansFromDB()
 })
 
 const todo_list = document.getElementById("todo_list");
