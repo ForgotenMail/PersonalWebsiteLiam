@@ -47,9 +47,8 @@ with psycopg.connect("dbname=liam user=liam") as conn:
             markdown TEXT
             )
             """)
-            
-            
-        
+
+
 @app.route('/gettasks', methods=['GET'])
 def get_tasks():
     with psycopg.connect("dbname=liam user=liam") as conn:
@@ -66,8 +65,9 @@ def get_tasks():
         "status": "success",
         "tasks": tasks
     })
-@app.route('/message', methods=['POST'])
 
+
+@app.route('/message', methods=['POST'])
 def receive_message():
     data = request.get_json()
 
@@ -87,7 +87,6 @@ def receive_message():
 
 
 @app.route('/addelement', methods=['POST'])
-
 def add_element():
     data = request.get_json()
 
@@ -113,10 +112,10 @@ def add_element():
             "message": "Task already exists boomer"
         })
     except psycopg.Error as e:
-            return jsonify({ 
+        return jsonify({
             "status": "error",
             "message": str(e)
-    }), 500
+        }), 500
     return jsonify({
         "status": "sucsess",
         "reply": f"Flask recieved your message dude: {user_message}"
@@ -124,7 +123,6 @@ def add_element():
     })
 
 @app.route('/deletetask', methods=['POST'])
-
 def delete_element():
     data = request.get_json()
 
@@ -136,14 +134,11 @@ def delete_element():
     user_message = data['task_name']
 
     with psycopg.connect("dbname=liam user=liam") as conn:
-
-        # Open a cursor to perform database operations
         with conn.cursor() as cur:
             cur.execute(
-                       " DELETE FROM task WHERE task_name = %s;",
-                        
-                        (user_message,)
-                        )
+                "DELETE FROM task WHERE task_name = %s;",
+                (user_message,)
+            )
 
     return jsonify({
         "status": "sucsess",
@@ -152,7 +147,6 @@ def delete_element():
     })
 
 @app.route('/checkoff', methods=['POST'])
-
 def checkedOff():
     data = request.get_json()
 
@@ -164,14 +158,11 @@ def checkedOff():
     user_message = data['task_name']
 
     with psycopg.connect("dbname=liam user=liam") as conn:
-
-        # Open a cursor to perform database operations
         with conn.cursor() as cur:
             cur.execute(
-                       " UPDATE task SET completed = NOT completed WHERE task_name = %s;",
-                        
-                        (user_message,)
-                        )
+                "UPDATE task SET completed = NOT completed WHERE task_name = %s;",
+                (user_message,)
+            )
 
     return jsonify({
         "status": "sucsess",
@@ -204,7 +195,6 @@ def assign_task():
     })
 
 @app.route('/create_preset', methods=['POST'])
-
 def create_preset():
     data = request.get_json()
 
@@ -219,23 +209,17 @@ def create_preset():
     preset_author = data.get('preset_author', 'liam the biam')
 
     with psycopg.connect("dbname=liam user=liam") as conn:
-
-        # Open a cursor to perform database operations
         with conn.cursor() as cur:
-
-            cur.execute("""
-                INSERT INTO presets (preset_name, preset_desc, preset_author) VALUES (%s, %s, %s)
-            """,
-            (preset_name, preset_desc, preset_author)
+            cur.execute(
+                "INSERT INTO presets (preset_name, preset_desc, preset_author) VALUES (%s, %s, %s)",
+                (preset_name, preset_desc, preset_author)
             )
 
             for task in tasks:
-                cur.execute("""
-                            INSERT INTO preset_tasks (task_name, preset_name)  VALUES (%s, %s)
-                            
-                            """,
-                            (task, preset_name,)
-                            )
+                cur.execute(
+                    "INSERT INTO preset_tasks (task_name, preset_name) VALUES (%s, %s)",
+                    (task, preset_name)
+                )
     return jsonify({
         "status": "sucsess",
         "reply": f"Flask recieved your message dude: {data}"
@@ -243,12 +227,8 @@ def create_preset():
     })
 
 @app.route('/allpresets')
-
 def return_all_presets():
-
     with psycopg.connect("dbname=liam user=liam") as conn:
-
-        # Open a cursor to perform database operations
         with conn.cursor() as cur:
             cur.execute("SELECT preset_name, preset_desc, preset_author FROM presets;")
 
@@ -266,7 +246,6 @@ def return_all_presets():
         })
 
 @app.route('/presets', methods=['POST'])
-
 def get_all_tasks_from_preset():
     data = request.get_json()
 
@@ -280,10 +259,10 @@ def get_all_tasks_from_preset():
     
     with psycopg.connect("dbname=liam user=liam") as conn:
         with conn.cursor() as cur:
-            cur.execute("""
-                        SELECT task_name FROM preset_tasks 
-                        WHERE preset_name = %s;
-                        """, (preset_name,))
+            cur.execute(
+                "SELECT task_name FROM preset_tasks WHERE preset_name = %s;",
+                (preset_name,)
+            )
             tasks = [row[0] for row in cur.fetchall()]
     return jsonify({
         "status": "sucsess",
@@ -292,7 +271,6 @@ def get_all_tasks_from_preset():
 
 
 @app.route('/delete_preset', methods=['POST'])
-
 def delete_presets():
     data = request.get_json()
 
@@ -306,17 +284,15 @@ def delete_presets():
     
     with psycopg.connect("dbname=liam user=liam") as conn:
         with conn.cursor() as cur:
-            cur.execute("""
-                        DELETE FROM preset_tasks 
-                        WHERE preset_name = %s;
-                        """, (preset_name,))
+            cur.execute(
+                "DELETE FROM preset_tasks WHERE preset_name = %s;",
+                (preset_name,)
+            )
 
-    with psycopg.connect("dbname=liam user=liam") as conn:
-        with conn.cursor() as cur:
-            cur.execute("""
-                        DELETE FROM presets 
-                        WHERE preset_name = %s;
-                        """, (preset_name,))
+            cur.execute(
+                "DELETE FROM presets WHERE preset_name = %s;",
+                (preset_name,)
+            )
     return jsonify({
         "status": "sucsess",
     })
@@ -324,7 +300,9 @@ def delete_presets():
 def get_test_plans():
     with psycopg.connect("dbname=liam user=liam") as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT key, title, description, markdown FROM test_plans ORDER BY id;")
+            cur.execute(
+                "SELECT key, title, description, markdown FROM test_plans ORDER BY id;"
+            )
             test_plans = [
                 {
                     "key": row[0],
@@ -358,10 +336,10 @@ def create_test_plan():
     try:
         with psycopg.connect("dbname=liam user=liam") as conn:
             with conn.cursor() as cur:
-                cur.execute("""
-                    INSERT INTO test_plans (key, title, description, markdown)
-                    VALUES (%s, %s, %s, %s)
-                """, (key, title, description, markdown))
+                cur.execute(
+                    "INSERT INTO test_plans (key, title, description, markdown) VALUES (%s, %s, %s, %s)",
+                    (key, title, description, markdown)
+                )
         return jsonify({
             "status": "success",
             "test_plan": {
@@ -397,10 +375,10 @@ def delete_test_plan():
 
     with psycopg.connect("dbname=liam user=liam") as conn:
         with conn.cursor() as cur:
-            cur.execute("""
-                DELETE FROM test_plans
-                WHERE key = %s;
-            """, (key,))
+            cur.execute(
+                "DELETE FROM test_plans WHERE key = %s;",
+                (key,)
+            )
 
     return jsonify({
         "status": "success",

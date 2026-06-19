@@ -2,6 +2,7 @@ import markdownIt from 'markdown-it';
 import complianceHtml from './compliance-html.js';
 
 const md = markdownIt();
+const API_BASE = 'http://127.0.0.1:5000';
 
 const testPlans = [
   {
@@ -52,7 +53,7 @@ let activeTestPlan = 'compliance';
 
 async function initTestPlansFromDB() {
   try {
-    const response = await fetch('http://127.0.0.1:5000/test_plans');
+    const response = await fetch(`${API_BASE}/test_plans`);
     const result = await response.json();
     if (result.test_plans) {
       for (const plan of result.test_plans) {
@@ -101,7 +102,7 @@ window.confirmCreateTestPlanModal = async function() {
 
   errEl.classList.add("hidden");
 
-  const response = await fetch('http://127.0.0.1:5000/create_test_plan', {
+  const response = await fetch(`${API_BASE}/create_test_plan`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -172,7 +173,7 @@ function renderTestPlanSelector() {
 }
 
 async function deleteTestPlan(key) {
-  await fetch('http://127.0.0.1:5000/delete_test_plan', {
+  await fetch(`${API_BASE}/delete_test_plan`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -235,20 +236,14 @@ const todo_list = document.getElementById("todo_list");
 const todo_input = document.getElementById("todo_input");
 const preset_list = document.getElementById("preset_list");
 const assigneeOptions = ["No one", "Liam", "Zippy", "Ben", "Eli", "Anika", "Janie", "Global"];
-// Create the function
 
 async function display_presets() {
-
-  const response = await fetch('http://127.0.0.1:5000/allpresets');
-
+  const response = await fetch(`${API_BASE}/allpresets`);
   const result = await response.json();
 
-  const presets = result.presets;
-
-  for (const preset of presets) {
-    create_preset(preset.name, preset.author, preset.desc)
+  for (const preset of result.presets) {
+    create_preset(preset.name, preset.author, preset.desc);
   }
-
 }
 
 function create_preset(preset_name, preset_author, preset_desc) {
@@ -270,10 +265,7 @@ function create_preset(preset_name, preset_author, preset_desc) {
   delete_button.textContent = "DELETE";
   delete_button.classList.add("delete-button");
 
-  summon_button.addEventListener("click", () => {
-    load_preset(preset_name);
-  });
-
+  summon_button.addEventListener("click", () => load_preset(preset_name));
   delete_button.addEventListener("click", () => {
     preset_container.remove();
     preset_delete(preset_name);
@@ -285,55 +277,38 @@ function create_preset(preset_name, preset_author, preset_desc) {
   preset_container.appendChild(delete_button);
 
   preset_list.appendChild(preset_container);
-
 }
 
 async function load_preset(preset_name) {
-
-  const payload = { "preset_name": preset_name };
-
-  const response = await fetch('http://127.0.0.1:5000/presets', {
+  const response = await fetch(`${API_BASE}/presets`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-
-    },
-    body: JSON.stringify(payload)
-
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ "preset_name": preset_name })
   });
 
   const result = await response.json();
 
-  const tasks = result.tasks;
-
-  for (const task of tasks) {
+  for (const task of result.tasks) {
     CreateTask(task, false, "No one");
   }
-
 }
 async function create_task_DBSkip(task_name, completed, assigned_to) {
-  console.log("CreateTask called with", task_name)
   let inputValue;
-  if (task_name == undefined || task_name == null || task_name == "") {
-
-    if (todo_input.value == "") {
+  if (!task_name) {
+    if (todo_input.value === "") {
       alert("Please actually type something bro");
       return;
     }
     inputValue = todo_input.value;
-  }
-
-  else {
+  } else {
     inputValue = task_name;
   }
 
-
-  if (completed == null || completed == "" || completed == undefined) {
+  if (!completed) {
     completed = false;
-
   }
 
-  if (assigned_to == null || assigned_to == "" || assigned_to == undefined) {
+  if (!assigned_to) {
     assigned_to = "No one";
   }
 
@@ -348,7 +323,7 @@ async function create_task_DBSkip(task_name, completed, assigned_to) {
   checkbox.checked = completed;
 
   if (completed) {
-    span.style.textDecoration = "line-through"
+    span.style.textDecoration = "line-through";
   }
 
   checkbox.addEventListener("change", () => {
@@ -356,15 +331,13 @@ async function create_task_DBSkip(task_name, completed, assigned_to) {
     checkedOff(inputValue);
   });
 
-
-
   const delete_btn = document.createElement("button");
   delete_btn.textContent = "Delete";
-  delete_btn.classList.add("delete-button")
+  delete_btn.classList.add("delete-button");
 
   delete_btn.addEventListener("click", () => {
     todo_list.removeChild(todo_item);
-    delete_element(inputValue)
+    delete_element(inputValue);
   });
 
   const assignee_dropdown = create_assignee_dropdown(inputValue, assigned_to);
@@ -375,46 +348,36 @@ async function create_task_DBSkip(task_name, completed, assigned_to) {
   todo_item.appendChild(delete_btn);
 
   todo_list.appendChild(todo_item);
-
   todo_input.value = "";
 }
+
 window.CreateTask = async function CreateTask(task_name, completed, assigned_to) {
-  console.log("CreateTask called with", task_name)
   let inputValue;
 
-  if (task_name == undefined || task_name == null || task_name == "") {
-
-    if (todo_input.value == "") {
+  if (!task_name) {
+    if (todo_input.value === "") {
       alert("Please actually type something bro");
       return;
     }
     inputValue = todo_input.value;
-  }
-
-  else {
+  } else {
     inputValue = task_name;
   }
 
-
-  if (completed == null || completed == "" || completed == undefined) {
+  if (!completed) {
     completed = false;
-
   }
 
-  if (assigned_to == null || assigned_to == "" || assigned_to == undefined) {
+  if (!assigned_to) {
     assigned_to = "No one";
   }
 
   const status = await create_element(inputValue, completed);
 
-  if (status == "error") {
-    alert("You tried to create a task that already existed!")
+  if (status === "error") {
+    alert("You tried to create a task that already existed!");
     return;
-
   }
-
-
-
 
   const span = document.createElement("span");
   span.textContent = inputValue;
@@ -427,7 +390,7 @@ window.CreateTask = async function CreateTask(task_name, completed, assigned_to)
   checkbox.checked = completed;
 
   if (completed) {
-    span.style.textDecoration = "line-through"
+    span.style.textDecoration = "line-through";
   }
 
   checkbox.addEventListener("change", () => {
@@ -435,14 +398,13 @@ window.CreateTask = async function CreateTask(task_name, completed, assigned_to)
     checkedOff(inputValue);
   });
 
-
   const delete_btn = document.createElement("button");
   delete_btn.textContent = "Delete";
-  delete_btn.classList.add("delete-button")
+  delete_btn.classList.add("delete-button");
 
   delete_btn.addEventListener("click", () => {
     todo_list.removeChild(todo_item);
-    delete_element(inputValue)
+    delete_element(inputValue);
   });
 
   const assignee_dropdown = create_assignee_dropdown(inputValue, assigned_to);
@@ -453,9 +415,7 @@ window.CreateTask = async function CreateTask(task_name, completed, assigned_to)
   todo_item.appendChild(delete_btn);
 
   todo_list.appendChild(todo_item);
-
   todo_input.value = "";
-
 }
 
 function create_assignee_dropdown(task_name, assigned_to) {
@@ -488,54 +448,15 @@ function create_assignee_dropdown(task_name, assigned_to) {
 
   return wrapper;
 }
-function preset_work() {
 
-  CreateTask("Find A girlfriend")
-  CreateTask("Finish Project")
-  CreateTask("Hit on coworkers ")
-}
-
-function preset_school() {
-  CreateTask("Do some research for scienc")
-  CreateTask("Play Some amongus!")
-  CreateTask("Do ELA homework")
-}
-
-async function preset_fun() {
-  CreateTask("Make a videogame")
-  CreateTask("Find a new friend")
-  CreateTask("Listen to some greenday")
-}
-
-function loadGroceries() {
-  addTask("Go To store");
-  addTask("Get Lettuce");
-  addTask("Get another girlfriend");
-}
-
-function loadWork() {
-  addTask("Stop Hitting on Secretary");
-  addTask("Stop Hitting on Boss");
-  addTask("Start hitting on some coworkers");
-  addTask("Find Yet Another Girlfriend");
-}
 
 async function get_all() {
-
-  const response = await fetch('http://127.0.0.1:5000/gettasks');
-
+  const response = await fetch(`${API_BASE}/gettasks`);
   const result = await response.json();
-
   const tasks = result.tasks;
 
-  for (let i = 0; i < tasks.length; i++) {
-    console.log(tasks[i]);
-    let task = tasks[i];
-    const task_name = task.task_name;
-    const completed = task.completed;
-    const assigned_to = task.assigned_to;
-    create_task_DBSkip(task_name, completed, assigned_to);
-
+  for (const task of tasks) {
+    create_task_DBSkip(task.task_name, task.completed, task.assigned_to);
   }
 }
 
@@ -543,120 +464,71 @@ async function get_all() {
 async function create_element(task_name) {
   const payload = { "task_name": task_name };
 
-  const response = await fetch('http://127.0.0.1:5000/addelement', {
+  const response = await fetch(`${API_BASE}/addelement`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-
   });
 
   const result = await response.json();
 
-  if (result.status == "error") {
-
+  if (result.status === "error") {
     return "error";
   }
 
   console.log(result);
-
 }
 
-
-async function message() {
-  const payload = { "message": "this is a funny message from ur bro javascript" };
-
-  const response = await fetch('http://127.0.0.1:5000/message', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-
-    },
-    body: JSON.stringify(payload)
-
-  });
-
-  const result = await response.json();
-
-  console.log(result);
-
-}
 
 async function delete_element(task_name) {
   const payload = { "task_name": task_name };
 
-  const response = await fetch('http://127.0.0.1:5000/deletetask', {
+  const response = await fetch(`${API_BASE}/deletetask`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-
   });
 
   const result = await response.json();
-
   console.log(result);
-
 }
 
 async function checkedOff(task_name) {
   const payload = { "task_name": task_name };
 
-  const response = await fetch('http://127.0.0.1:5000/checkoff', {
+  const response = await fetch(`${API_BASE}/checkoff`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-
   });
 
   const result = await response.json();
-
   console.log(result);
-
 }
 
 async function assign_task(task_name, assigned_to) {
   const payload = { "task_name": task_name, "assigned_to": assigned_to };
 
-  const response = await fetch('http://127.0.0.1:5000/assigntask', {
+  const response = await fetch(`${API_BASE}/assigntask`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-
   });
 
   const result = await response.json();
-
   console.log(result);
-
 }
 
 async function preset_delete(preset_name) {
   const payload = { "preset_name": preset_name };
 
-  const response = await fetch('http://127.0.0.1:5000/delete_preset', {
+  const response = await fetch(`${API_BASE}/delete_preset`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-
   });
 
   const result = await response.json();
-
   console.log(result);
-
 }
 
