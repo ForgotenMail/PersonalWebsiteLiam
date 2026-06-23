@@ -155,7 +155,8 @@ function renderTestPlanSelector() {
     if (plan.fromDB) {
       const deleteBtn = document.createElement("span");
       deleteBtn.className = "test-plan-delete";
-      deleteBtn.textContent = "X";
+      deleteBtn.textContent =
+        "X";
       deleteBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         deleteTestPlan(plan.key);
