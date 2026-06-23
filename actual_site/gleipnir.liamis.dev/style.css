@@ -1,4 +1,12 @@
-/* === GLOBAL RESET / BASE === */
+/* =============================================================================
+   Gleipnir To-Do List — Stylesheet
+   Dark fantasy / gothic RPG theme — deep night background, glowing green accents
+   ============================================================================= */
+
+
+/* ---------------------------------------------------------------------------
+   GLOBAL RESET & BASE
+   --------------------------------------------------------------------------- */
 body {
   background-color: #020617; /* deep night */
   color: #d1fae5; /* soft green text */
@@ -12,19 +20,28 @@ body {
   padding: 20px;
 }
 
-/* === TITLE === */
+
+/* ---------------------------------------------------------------------------
+   TITLES
+   --------------------------------------------------------------------------- */
 h1 {
   color: #22c55e; /* glowing green */
   text-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
 }
 
-/* === TODO LIST CONTAINER === */
+
+/* ---------------------------------------------------------------------------
+   TODO LIST CONTAINER
+   --------------------------------------------------------------------------- */
 ul {
   list-style-type: none;
   padding: 0;
 }
 
-/* === TODO ITEM (CARD) === */
+
+/* ---------------------------------------------------------------------------
+   TODO ITEM (CARD)
+   --------------------------------------------------------------------------- */
 .todo_item {
   display: flex;
   align-items: center;
@@ -47,27 +64,35 @@ ul {
   transition: all 0.2s ease;
 }
 
-/* Hover = "system online" energy */
 .todo_item:hover {
   transform: scale(1.02);
   box-shadow: 0 0 18px rgba(34, 197, 94, 0.2);
 }
 
-/* === CHECKBOX === */
+
+/* ---------------------------------------------------------------------------
+   CHECKBOXES (global + main todo list)
+   --------------------------------------------------------------------------- */
 input[type="checkbox"] {
   accent-color: #22c55e;
   transform: scale(1.2);
   cursor: pointer;
 }
 
-/* === COMPLETED TASK === */
+
+/* ---------------------------------------------------------------------------
+   COMPLETED TASK HELPER CLASS
+   --------------------------------------------------------------------------- */
 .completed {
   text-decoration: line-through;
   color: #4b5563;
   opacity: 0.6;
 }
 
-/* === BUTTONS === */
+
+/* ---------------------------------------------------------------------------
+   BUTTONS
+   --------------------------------------------------------------------------- */
 button {
   background-color: #14532d;
   color: #d1fae5;
@@ -81,6 +106,11 @@ button {
   cursor: pointer;
 
   transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #166534;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
 }
 
 .presetbutton  {
@@ -97,13 +127,8 @@ button {
 
   transition: all 0.2s ease;
 }
-/* Hover glow */
-button:hover {
-  background-color: #166534;
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
-}
 
-/* Delete button = danger but still in theme */
+/* Delete button — danger but stays in-theme */
 .delete-button {
   background-color: #3f1d1d;
   border: 1px solid #ef4444;
@@ -114,7 +139,10 @@ button:hover {
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
 }
 
-/* === INPUT FIELD === */
+
+/* ---------------------------------------------------------------------------
+   INPUT FIELD
+   --------------------------------------------------------------------------- */
 #todo_input {
   background-color: #052e16;
   color: #d1fae5;
@@ -133,6 +161,11 @@ button:hover {
   border-color: #22c55e;
   box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
 }
+
+
+/* ---------------------------------------------------------------------------
+   SIDEBAR (left tools panel)
+   --------------------------------------------------------------------------- */
 .sidebar {
   position: fixed;
   top: 0;
@@ -141,7 +174,7 @@ button:hover {
   width: 280px;
   height: 100vh;
 
-  overflow-y: auto;     /* vertical scroll */
+  overflow-y: auto;
 
   display: flex;
   flex-direction: column;
@@ -161,7 +194,61 @@ button:hover {
   z-index: 10;
 }
 
-/* === TEST PLANS PANEL === */
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #22c55e;
+
+  margin-bottom: 10px;
+  padding: 6px 4px;
+
+  letter-spacing: 0.5px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 12px 14px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #d1fae5;
+  text-decoration: none;
+
+  background-color: transparent;
+  border: 1px solid transparent;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.sidebar-item:hover {
+  background-color: #064e3b;
+  border-color: #14532d;
+
+  transform: translateX(4px);
+
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.15);
+}
+
+.sidebar-item.active {
+  background-color: #14532d;
+  border-color: #22c55e;
+
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.25);
+}
+
+
+/* ---------------------------------------------------------------------------
+   TEST PLANS PANEL (slide-in from left)
+   --------------------------------------------------------------------------- */
 .test-plans-panel {
   position: fixed;
   top: 0;
@@ -186,15 +273,15 @@ button:hover {
   z-index: 20;
 }
 
+.test-plans-panel.open {
+  transform: translateX(0);
+}
+
 .test-plan-screen {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow-y: auto;
-}
-
-.test-plans-panel.open {
-  transform: translateX(0);
 }
 
 .test-plans-header {
@@ -341,6 +428,10 @@ button:hover {
   box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
 }
 
+
+/* ---------------------------------------------------------------------------
+   TEST PLAN CONTENT (rendered markdown)
+   --------------------------------------------------------------------------- */
 .test-plans-content {
   padding: 20px;
 
@@ -425,11 +516,6 @@ button:hover {
   margin: 20px 0;
 }
 
-.test-plans-content input[type="checkbox"] {
-  accent-color: #22c55e;
-  margin-right: 8px;
-}
-
 .test-plans-content em {
   color: #86efac;
 }
@@ -452,56 +538,89 @@ button:hover {
 }
 
 
-.sidebar-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #22c55e;
+/* ---------------------------------------------------------------------------
+   MARKDOWN TASK CHECKBOXES (interactive, post-processed)
+   --------------------------------------------------------------------------- */
 
-  margin-bottom: 10px;
-  padding: 6px 4px;
-
-  letter-spacing: 0.5px;
+/* Horizontal wrapper for checkbox + label on one line */
+.md-task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.sidebar-item {
-  display: flex;
-  align-items: center;
+/* The checkbox itself — sized up, accented, and with hover glow */
+.md-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 20px;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
 
-  width: 100%;
-
-  padding: 12px 14px;
-
-  border-radius: 10px;
-
-  font-size: 14px;
-  font-weight: 500;
-
-  color: #d1fae5;
-  text-decoration: none;
-
-  background-color: transparent;
-  border: 1px solid transparent;
+  background-color: #052e16;
+  border: 2px solid #22c55e;
+  border-radius: 4px;
 
   cursor: pointer;
 
-  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.15s ease;
+
+  flex-shrink: 0;
 }
 
-.sidebar-item:hover {
-  background-color: #064e3b;
-  border-color: #14532d;
-
-  transform: translateX(4px);
-
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.15);
+/* Hover glow */
+.md-checkbox:hover {
+  border-color: #86efac;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
 }
 
-.sidebar-item.active {
-  background-color: #14532d;
+/* Checked state — fill with green, draw a white checkmark */
+.md-checkbox:checked {
+  background-color: #22c55e;
   border-color: #22c55e;
-
-  box-shadow: 0 0 14px rgba(34, 197, 94, 0.25);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
 }
+
+/* CSS-only checkmark via pseudo-element */
+.md-checkbox:checked::after {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 10px;
+  border: solid #020617;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translateY(-1px);
+}
+
+/* The text label next to the checkbox */
+.md-task-text {
+  color: #d1fae5;
+  transition: all 0.15s ease;
+}
+
+/* When parent <li> contains a checked checkbox, dim the text */
+li:has(.md-checkbox:checked) .md-task-text {
+  text-decoration: line-through;
+  opacity: 0.5;
+  color: #64748b;
+}
+
+/* List items that have been processed as task items get flex treatment */
+.test-plans-content li:has(.md-task-item) {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+
+/* ---------------------------------------------------------------------------
+   PRESET BOX (right sidebar)
+   --------------------------------------------------------------------------- */
 .preset_box {
   position: fixed;
   top: 0;
@@ -514,19 +633,20 @@ button:hover {
   flex-direction: column;
   align-items: stretch;
 
-  overflow-y: auto;     /* vertical scroll */
+  overflow-y: auto;
 
   gap: 8px;
 
   padding: 20px;
 
   background: linear-gradient(180deg, #031b12 0%, #020f0a 100%);
-  border-right: 1px solid #14532d;
+  border-left: 1px solid #14532d;
 
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
-  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.5);
+  box-shadow: -4px 0 25px rgba(0, 0, 0, 0.5);
 }
+
 .preset_item {
   padding: 8px 10px;
   margin-bottom: 6px;
@@ -546,7 +666,9 @@ button:hover {
 }
 
 
-/* === ASSIGNEE DROPDOWN === */
+/* ---------------------------------------------------------------------------
+   ASSIGNEE DROPDOWN
+   --------------------------------------------------------------------------- */
 .assignee_dropdown_wrapper {
   display: flex;
   flex-direction: column;
@@ -600,7 +722,10 @@ button:hover {
   color: #d1fae5;
 }
 
-/* === TEST PLAN CREATION MODAL === */
+
+/* ---------------------------------------------------------------------------
+   TEST PLAN CREATION MODAL
+   --------------------------------------------------------------------------- */
 .preset-modal {
   position: fixed;
   top: 0;
