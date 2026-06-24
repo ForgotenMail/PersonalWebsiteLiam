@@ -10,7 +10,7 @@
 
        <h3>Tools</h3>
 
-      <a class="sidebar-item" href="http://localhost:5173/create-preset/">Create a preset</a>
+      <span class="sidebar-item" onclick="openCreatePresetModal()">Create a Preset</span>
 
       <span class="sidebar-item" onclick="openCreateTestPlanModal()">Create Test Plan</span>
 
@@ -38,6 +38,40 @@
           </div>
 
           <p id="create-test-plan-error" class="preset-modal-error hidden"></p>
+        </div>
+      </div>
+
+      <!-- ----------------------------------------------------------------
+           Preset Creation Modal  (same pattern as Test Plan modal)
+           ---------------------------------------------------------------- -->
+      <div id="create-preset-modal" class="preset-modal hidden">
+        <div class="preset-modal-content" style="max-width: 520px;">
+          <h2>Create Preset</h2>
+          <p class="preset-modal-hint">Forge a reusable task list for thy crusades!</p>
+
+          <label class="preset-modal-label" for="preset-name-input">Preset Name</label>
+          <input id="preset-name-input" class="preset-modal-input" type="text" placeholder="e.g. Weekend Grind">
+
+          <label class="preset-modal-label" for="preset-author-input">Author</label>
+          <input id="preset-author-input" class="preset-modal-input" type="text" placeholder="e.g. Liam">
+
+          <label class="preset-modal-label" for="preset-desc-input">Description</label>
+          <textarea id="preset-desc-input" class="preset-modal-textarea" rows="2" placeholder="What be this preset about?"></textarea>
+
+          <label class="preset-modal-label" for="preset-task-input">Tasks</label>
+          <div style="display:flex; gap:8px; margin-bottom:14px;">
+            <input id="preset-task-input" class="preset-modal-input" type="text" placeholder="Enter a task name..."
+              style="margin-bottom:0; flex:1;">
+            <button onclick="addPresetTask()" style="white-space:nowrap; margin-left:0;">+ Add</button>
+          </div>
+          <ul id="preset-task-list" style="margin-bottom:14px;"></ul>
+
+          <div class="preset-modal-actions">
+            <button class="preset-modal-cancel" onclick="cancelCreatePresetModal()">Cancel</button>
+            <button class="preset-modal-confirm" onclick="confirmCreatePresetModal()">Create Preset</button>
+          </div>
+
+          <p id="create-preset-error" class="preset-modal-error hidden"></p>
         </div>
       </div>
 

@@ -354,6 +354,131 @@ window.confirmCreateTestPlanModal = async function() {
 
 
 // =============================================================================
+//  Create Preset Modal  (same flow as Create Test Plan Modal)
+// =============================================================================
+
+/** Tasks accumulated while building a preset — reset on open/cancel. */
+let presetTaskList = [];
+
+window.openCreatePresetModal = function() {
+  presetTaskList = [];
+  renderPresetTaskList();
+  document.getElementById("create-preset-modal").classList.remove("hidden");
+  document.getElementById("preset-task-input").focus();
+};
+
+window.cancelCreatePresetModal = function() {
+  document.getElementById("create-preset-modal").classList.add("hidden");
+  document.getElementById("create-preset-error").classList.add("hidden");
+  document.getElementById("preset-name-input").value = "";
+  document.getElementById("preset-author-input").value = "";
+  document.getElementById("preset-desc-input").value = "";
+  document.getElementById("preset-task-input").value = "";
+  presetTaskList = [];
+  renderPresetTaskList();
+};
+
+/**
+ * Adds the task currently typed into #preset-task-input to the
+ * in-memory list and re-renders the task preview.
+ */
+window.addPresetTask = function() {
+  const input = document.getElementById("preset-task-input");
+  const taskName = input.value.trim();
+  if (!taskName) return;
+
+  presetTaskList.push(taskName);
+  input.value = "";
+  input.focus();
+  renderPresetTaskList();
+};
+
+/**
+ * Rebuilds the <ul> preview of tasks inside the preset modal.
+ */
+function renderPresetTaskList() {
+  const list = document.getElementById("preset-task-list");
+  if (!list) return;
+  list.innerHTML = "";
+
+  presetTaskList.forEach((task, idx) => {
+    const li = document.createElement("li");
+    li.style.cssText = "display:flex; align-items:center; justify-content:space-between; "
+      + "padding:6px 10px; margin:4px 0; background:#052e16; "
+      + "border:1px solid #14532d; border-radius:6px; font-size:13px;";
+
+    const span = document.createElement("span");
+    span.textContent = task;
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "X";
+    delBtn.className = "delete-button";
+    delBtn.style.cssText = "padding:2px 8px; font-size:11px; margin-left:8px;";
+    delBtn.addEventListener("click", () => {
+      presetTaskList.splice(idx, 1);
+      renderPresetTaskList();
+    });
+
+    li.appendChild(span);
+    li.appendChild(delBtn);
+    list.appendChild(li);
+  });
+}
+
+window.confirmCreatePresetModal = async function() {
+  const presetName = document.getElementById("preset-name-input").value.trim();
+  const presetAuthor = document.getElementById("preset-author-input").value.trim();
+  const presetDesc = document.getElementById("preset-desc-input").value.trim();
+  const errEl = document.getElementById("create-preset-error");
+
+  if (!presetName) {
+    errEl.textContent = "Thou must name thy preset!";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  if (presetTaskList.length === 0) {
+    errEl.textContent = "Add at least one task, traveler!";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  errEl.classList.add("hidden");
+
+  const response = await fetch(`${API_BASE}/create_preset`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      task_list: presetTaskList,
+      preset_name: presetName,
+      preset_desc: presetDesc,
+      preset_author: presetAuthor || undefined,
+    }),
+  });
+
+  const result = await response.json();
+
+  if (result.status === "error") {
+    errEl.textContent = result.message || "Preset creation failed!";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  // Refresh the presets sidebar so the new preset appears immediately
+  preset_list.innerHTML = "";
+  display_presets();
+
+  document.getElementById("create-preset-modal").classList.add("hidden");
+  document.getElementById("preset-name-input").value = "";
+  document.getElementById("preset-author-input").value = "";
+  document.getElementById("preset-desc-input").value = "";
+  document.getElementById("preset-task-input").value = "";
+  presetTaskList = [];
+  renderPresetTaskList();
+};
+
+
+// =============================================================================
 //  Presets (right sidebar)
 // =============================================================================
 
