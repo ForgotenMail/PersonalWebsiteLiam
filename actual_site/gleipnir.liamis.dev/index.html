@@ -19,6 +19,7 @@
      </div>
 
       <div id="create-test-plan-modal" class="preset-modal hidden">
+      <!-- This aspect of the webpage is hidden, but when it is needed to be used, it is unhidden so we can se it! -->
         <div class="preset-modal-content">
           <h2>Create Test Plan</h2>
           <p class="preset-modal-hint">Forge a new test plan to guide thy QA crusade!</p>
@@ -45,6 +46,7 @@
            Preset Creation Modal  (same pattern as Test Plan modal)
            ---------------------------------------------------------------- -->
       <div id="create-preset-modal" class="preset-modal hidden">
+      <!-- Same thing as the last one, define everything in CSS and HTMl and then use javascript to control it being displayed -->
         <div class="preset-modal-content" style="max-width: 520px;">
           <h2>Create Preset</h2>
           <p class="preset-modal-hint">Forge a reusable task list for thy crusades!</p>
@@ -76,13 +78,17 @@
       </div>
 
       <div id="test-plans-panel" class="test-plans-panel">
+      
+      <!-- This section is what we see when we are selecting the test plan -->
         <div id="test-plan-selector-screen" class="test-plan-screen">
           <div class="test-plans-header">
             <h3>Test Plans</h3>
             <button class="test-plans-close" onclick="toggleTestPlans()">X</button>
           </div>
           <div id="test-plan-selector" class="test-plan-selector"></div>
+
         </div>
+
         <div id="test-plan-content-screen" class="test-plan-screen" style="display:none">
           <div class="test-plans-header">
             <button class="test-plans-back" onclick="backToSelector()">←</button>

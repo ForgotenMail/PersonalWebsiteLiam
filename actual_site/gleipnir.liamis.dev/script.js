@@ -2,7 +2,6 @@
 //  Imports
 // =============================================================================
 import markdownit from 'markdown-it';
-import complianceHtml from './compliance-html.js';
 
 // ---------------------------------------------------------------------------
 //  Markdown parser setup (markdown-it with HTML passthrough enabled)
