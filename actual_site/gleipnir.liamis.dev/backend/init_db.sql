@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS checkbox_states (
+    item_id TEXT PRIMARY KEY,
+    checked BOOLEAN NOT NULL DEFAULT FALSE
+);

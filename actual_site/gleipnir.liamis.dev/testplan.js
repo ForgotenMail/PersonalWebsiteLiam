@@ -249,13 +249,16 @@ After: ![][image38]
 - [ ] Action: Hover your mouse over “I am not granting entry at this time”![][image45]  
 - [ ] Result: The button is outlined in blue and the box turns gray   
 - [ ] Action: Click on “A technician may enter even if I am not home”  
-- [ ] Result: The circle is filled in with blue and options open under the box  
-      ![][image46]  
+- [ ] Result: The circle is filled in with blue and options open under the box                   
+  ![][image46]  
 - [ ] Action: Click on “A technician may enter, but I want to be present”  
+
 - [ ] Result: The circle is filled in with blue and more options appear![][image47]  
 - [ ] Action: Click on “I am not granting entry at this time”  
 - [ ] Result: The circle is filled in blue and more options appear  
-- [ ] ![][image48]  
+
+![][image48]  
+
 - [ ] Action: Click on “A technician may enter even if I am not home”  
 - [ ] Result: The circle is filled blue and more options appear (refer to prior screenshots)  
 - [ ] Action: Click the text box under “Access instructions (Optional)”  
