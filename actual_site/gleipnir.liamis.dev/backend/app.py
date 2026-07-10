@@ -54,8 +54,8 @@ def set_checkbox_state(item_id):
             VALUES (%s, %s)
             ON CONFLICT (item_id) DO UPDATE SET checked = EXCLUDED.checked
             """,
-            (item_id, checked),
-        )
+            (item_id, checked))
+        
     return jsonify({"item_id": item_id, "checked": checked})
 
 

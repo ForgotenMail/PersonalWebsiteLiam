@@ -12,8 +12,6 @@ function main() {
 
   const toggleCheckbox = new Map();
 
-  const checkedItems = [];
-
   const md = markdownit()
 
   const html = md.render(testplan)
@@ -64,22 +62,18 @@ function main() {
 
 
 
-      li.addEventListener('click', () => {
+      li.addEventListener('click', (e) => {
+        if (e.target === checkbox) return
         checkbox.checked = !checkbox.checked
-        li.classList.toggle('checked', checkbox.checked)
-        const id = el.id;
-        checkedItems.push(id);
-        saveCheckboxState(el.id, checkbox.checked)
+        checkbox.dispatchEvent(new Event('change'))
       })
 
-      function toggle() {
-        console.log("I TWAS TOGGLED!")
-        checkbox.checked = !checkbox.checked
-        li.classList.toggle('checked', checkbox.checked)
-        saveCheckboxState(el.id, checkbox.checked)
+      function applyState(checked) {
+        checkbox.checked = checked
+        li.classList.toggle('checked', checked)
       }
 
-      toggleCheckbox.set(el.id, { toggle, checkbox, li });
+      toggleCheckbox.set(el.id, { applyState, checkbox, li });
 
       numId = numId + 1;
 
@@ -111,12 +105,8 @@ function main() {
       console.log(states)
       for (const [itemId, checked] of Object.entries(states)) {
         const entry = toggleCheckbox.get(itemId)
-        console.log("We entered the function?")
         if (!entry) continue
-        if (checked == true) {
-          console.log("The loop was entered!")
-          entry.toggle();
-        }
+        entry.applyState(checked === true)
       }
     } catch (e) {
       console.error('Failed to load checkbox states:', e)
